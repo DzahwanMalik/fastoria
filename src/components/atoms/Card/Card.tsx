@@ -13,6 +13,7 @@ const BG_COLOR_MAP: Record<CardBgColor, string> = {
   yellow: "bg-electric-yellow",
   lime: "bg-primary-container",
   coral: "bg-punch-coral",
+  tertiary: "bg-tertiary-container",
   container: "bg-surface-container",
   transparent: "bg-transparent",
 };

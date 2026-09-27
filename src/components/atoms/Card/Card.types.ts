@@ -6,6 +6,7 @@ export type CardBgColor =
   | "yellow"
   | "lime"
   | "coral"
+  | "tertiary"
   | "container"
   | "transparent";
 

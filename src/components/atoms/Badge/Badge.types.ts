@@ -8,7 +8,8 @@ export type BadgeColor =
   | "electric-cyan"
   | "lime"
   | "secondary"
-  | "white";
+  | "white"
+  | "surface-container";
 
 export type BadgeSize = "sm" | "md" | "lg" | "inherit";
 

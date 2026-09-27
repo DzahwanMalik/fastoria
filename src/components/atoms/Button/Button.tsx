@@ -30,6 +30,8 @@ export default function Button({
     danger: "bg-punch-coral text-surface-white hover:bg-tertiary",
     ghost: "bg-transparent text-on-surface hover:bg-surface-container-low border-none shadow-none",
     lime: "bg-primary-container text-on-surface hover:bg-electric-yellow",
+    mint: "bg-vivid-mint text-on-surface hover:bg-primary-container",
+    cyan: "bg-electric-cyan text-on-surface hover:bg-electric-yellow",
   };
 
   const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`.trim();

@@ -29,6 +29,7 @@ export default function Badge({
     lime: "bg-primary-container text-on-surface",
     secondary: "bg-secondary text-surface-white",
     white: "bg-surface-white text-on-surface",
+    "surface-container": "bg-surface-container text-on-surface",
   };
 
   const sizeClasses: Record<BadgeSize, string> = {

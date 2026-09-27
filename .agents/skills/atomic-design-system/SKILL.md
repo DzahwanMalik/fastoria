@@ -53,9 +53,33 @@ src/
 │   │   │   ├── HighlightItem.tsx  # Icon + label metric pair
 │   │   │   ├── HighlightItem.types.ts # HighlightItemProps
 │   │   │   └── index.ts
-│   │   └── CompetitionCard/
-│   │       ├── CompetitionCard.tsx # Competition category card with tags & price
-│   │       ├── CompetitionCard.types.ts # CompetitionCardProps, CompetitionItem
+│   │   ├── CompetitionCard/
+│   │   │   ├── CompetitionCard.tsx # Competition category card with tags & price
+│   │   │   ├── CompetitionCard.types.ts # CompetitionCardProps, CompetitionItem
+│   │   │   └── index.ts
+│   │   ├── TimelineStepCard/
+│   │   │   ├── TimelineStepCard.tsx # Milestone step box with date, title, and status
+│   │   │   ├── TimelineStepCard.types.ts # TimelineStepCardProps, TimelineStepItem
+│   │   │   └── index.ts
+│   │   ├── RulebookBanner/
+│   │   │   ├── RulebookBanner.tsx # Official rulebook download CTA bar
+│   │   │   ├── RulebookBanner.types.ts # RulebookBannerProps
+│   │   │   └── index.ts
+│   │   ├── ContactCard/
+│   │   │   ├── ContactCard.tsx    # Contact person card with role, direct channel & button
+│   │   │   ├── ContactCard.types.ts # ContactCardProps, ContactCardItem
+│   │   │   └── index.ts
+│   │   ├── FaqAccordion/
+│   │   │   ├── FaqAccordion.tsx   # Neo-brutalist interactive FAQ accordion list
+│   │   │   ├── FaqAccordion.types.ts # FaqAccordionProps, FaqItem
+│   │   │   └── index.ts
+│   │   ├── SponsorLogo/
+│   │   │   ├── SponsorLogo.tsx    # Responsive interactive partner logo with hover state
+│   │   │   ├── SponsorLogo.types.ts # SponsorLogoProps
+│   │   │   └── index.ts
+│   │   └── FooterSocialLink/
+│   │       ├── FooterSocialLink.tsx # Tactile social link badge button with brand hover
+│   │       ├── FooterSocialLink.types.ts # FooterSocialLinkProps
 │   │       └── index.ts
 │   │
 │   └── organisms/                 # 🏛️ Standalone UI sections (FPC pattern)
@@ -71,10 +95,30 @@ src/
 │       │   ├── MarqueeTicker.tsx  # Infinite auto-scrolling ticker bar
 │       │   ├── MarqueeTicker.types.ts # MarqueeTickerProps
 │       │   └── index.ts
-│       └── CompetitionSection/
-│           ├── CompetitionSection.tsx # Competition category arena with filter tabs
-│           ├── CompetitionSection.types.ts # CompetitionSectionProps
-│           ├── CompetitionSection.constants.ts # Category tabs & competition data
+│       ├── CompetitionSection/
+│       │   ├── CompetitionSection.tsx # Competition category arena with filter tabs
+│       │   ├── CompetitionSection.types.ts # CompetitionSectionProps
+│       │   ├── CompetitionSection.constants.ts # Category tabs & competition data
+│       │   └── index.ts
+│       ├── TimelineSection/
+│       │   ├── TimelineSection.tsx # 5-milestone official schedule & rulebook banner
+│       │   ├── TimelineSection.types.ts # TimelineSectionProps
+│       │   ├── TimelineSection.constants.ts # Official schedule milestones
+│       │   └── index.ts
+│       ├── ContactSection/
+│       │   ├── ContactSection.tsx # Contact person grid & quick FAQ mini-accordion
+│       │   ├── ContactSection.types.ts # ContactSectionProps
+│       │   ├── ContactSection.constants.ts # Contact channels & FAQ entries
+│       │   └── index.ts
+│       ├── SponsorSection/
+│       │   ├── SponsorSection.tsx # Continuous marquee ticker of partners & sponsors
+│       │   ├── SponsorSection.types.ts # SponsorSectionProps
+│       │   ├── SponsorSection.constants.tsx # Verified partner SVGs & metadata
+│       │   └── index.ts
+│       └── Footer/
+│           ├── Footer.tsx         # Global 3-column footer with address, socials, legal links
+│           ├── Footer.types.ts    # FooterProps, FooterSocialItem, FooterLegalLink
+│           ├── Footer.constants.tsx # Brand copy, secretariat details & official social SVGs
 │           └── index.ts
 │
 ├── layouts/                       # 📐 Global frame scaffolding (Flat files)

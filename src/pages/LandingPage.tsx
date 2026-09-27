@@ -1,8 +1,11 @@
 import type { JSX } from "react";
 
 import CompetitionSection from "@/components/organisms/CompetitionSection";
+import ContactSection from "@/components/organisms/ContactSection";
 import Hero from "@/components/organisms/Hero";
 import MarqueeTicker from "@/components/organisms/MarqueeTicker";
+import SponsorSection from "@/components/organisms/SponsorSection";
+import TimelineSection from "@/components/organisms/TimelineSection";
 import MainLayout from "@/layouts/MainLayout";
 
 export default function LandingPage(): JSX.Element {
@@ -33,6 +36,15 @@ export default function LandingPage(): JSX.Element {
         onRegisterClick={handleRegisterClick}
         onGuidebookClick={handleGuidebookClick}
       />
+
+      {/* Official Schedule & Timeline Organism */}
+      <TimelineSection />
+
+      {/* Contact Person & Quick FAQ Organism */}
+      <ContactSection />
+
+      {/* Partners & Sponsors Marquee Organism */}
+      <SponsorSection />
     </MainLayout>
   );
 }
