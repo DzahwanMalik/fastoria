@@ -1,1 +1,358 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Space+Grotesk:wght@300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
 @import "tailwindcss";
+
+/* ==========================================================================
+   Electric Neo-Brutalist Design System - CSS Variables & Tokens
+   Synchronized with Stitch Project: Neo-Brutalist Event Landing Page
+   ========================================================================== */
+
+:root {
+  /* Canvas & Surface Colors */
+  --canvas-bg: #E8E8E2;
+  --surface-white: #FFFFFF;
+  --surface: #F9F9F9;
+  --surface-dim: #DADADA;
+  --surface-bright: #F9F9F9;
+  --surface-variant: #E2E2E2;
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #F3F3F3;
+  --surface-container: #EEEEEE;
+  --surface-container-high: #E8E8E8;
+  --surface-container-highest: #E2E2E2;
+
+  /* Typography & Foreground */
+  --on-surface: #1B1B1B;
+  --on-surface-variant: #434933;
+  --on-background: #1B1B1B;
+  --background: #F9F9F9;
+  --inverse-surface: #303030;
+  --inverse-on-surface: #F1F1F1;
+
+  /* Outlines & Borders */
+  --outline: #747A60;
+  --outline-variant: #C3CAAC;
+  --surface-tint: #4E6700;
+  --border-black: #000000;
+
+  /* Primary Brand (Electric Lime & Deep Foliage) */
+  --primary: #4E6700;
+  --primary-container: #C7FF01;
+  --on-primary: #FFFFFF;
+  --on-primary-container: #587300;
+  --inverse-primary: #A7D700;
+  --primary-fixed: #BFF500;
+  --primary-fixed-dim: #A7D700;
+  --on-primary-fixed: #151F00;
+  --on-primary-fixed-variant: #3A4D00;
+
+  /* Secondary (Deep Punch Violet) */
+  --secondary: #752DD9;
+  --secondary-container: #8E4DF4;
+  --on-secondary: #FFFFFF;
+  --on-secondary-container: #FFFBFF;
+  --secondary-fixed: #ECDCFF;
+  --secondary-fixed-dim: #D5BBFF;
+  --on-secondary-fixed: #270058;
+  --on-secondary-fixed-variant: #5E00C1;
+
+  /* Tertiary (Punch Coral / Hot Pink) */
+  --tertiary: #BE023B;
+  --tertiary-container: #FFE6E7;
+  --on-tertiary: #FFFFFF;
+  --on-tertiary-container: #CF1A46;
+  --tertiary-fixed: #FFDADB;
+  --tertiary-fixed-dim: #FFB2B7;
+  --on-tertiary-fixed: #40000E;
+  --on-tertiary-fixed-variant: #91002B;
+
+  /* High-Voltage Neo-Brutalist Accent Chromatics */
+  --electric-yellow: #FFE600;
+  --punch-coral: #FF4365;
+  --vivid-mint: #22C55E;
+  --electric-cyan: #38BDF8;
+  --soft-lilac: #C4B5FD;
+  --dark-violet: #200F48;
+  --deep-obsidian: #130537;
+
+  /* Error States */
+  --error: #BA1A1A;
+  --error-container: #FFDAD6;
+  --on-error: #FFFFFF;
+  --on-error-container: #93000A;
+
+  /* Hard Shadows (Zero-Blur Depth) */
+  --shadow-neo-xs: 2px 2px 0px #000000;
+  --shadow-neo-sm: 3px 3px 0px #000000;
+  --shadow-neo-md: 4px 4px 0px #000000;
+  --shadow-neo-lg: 6px 6px 0px #000000;
+  --shadow-neo-xl: 8px 8px 0px #000000;
+}
+
+/* ==========================================================================
+   Tailwind CSS v4 Theme Integration
+   ========================================================================== */
+@theme {
+  /* Theme Colors */
+  --color-canvas-bg: var(--canvas-bg);
+  --color-surface-white: var(--surface-white);
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-variant: var(--surface-variant);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-on-background: var(--on-background);
+  --color-background: var(--background);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  --color-surface-tint: var(--surface-tint);
+
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary: var(--on-primary);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-inverse-primary: var(--inverse-primary);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-on-primary-fixed: var(--on-primary-fixed);
+  --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary: var(--on-secondary);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-secondary-fixed: var(--secondary-fixed);
+  --color-secondary-fixed-dim: var(--secondary-fixed-dim);
+  --color-on-secondary-fixed: var(--on-secondary-fixed);
+  --color-on-secondary-fixed-variant: var(--on-secondary-fixed-variant);
+
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+  --color-tertiary-fixed: var(--tertiary-fixed);
+  --color-tertiary-fixed-dim: var(--tertiary-fixed-dim);
+  --color-on-tertiary-fixed: var(--on-tertiary-fixed);
+  --color-on-tertiary-fixed-variant: var(--on-tertiary-fixed-variant);
+
+  --color-electric-yellow: var(--electric-yellow);
+  --color-punch-coral: var(--punch-coral);
+  --color-vivid-mint: var(--vivid-mint);
+  --color-electric-cyan: var(--electric-cyan);
+  --color-soft-lilac: var(--soft-lilac);
+  --color-dark-violet: var(--dark-violet);
+  --color-deep-obsidian: var(--deep-obsidian);
+
+  --color-error: var(--error);
+  --color-error-container: var(--error-container);
+  --color-on-error: var(--on-error);
+  --color-on-error-container: var(--on-error-container);
+
+  /* Typography Families */
+  --font-display-hero: "Space Grotesk", sans-serif;
+  --font-display-hero-mobile: "Space Grotesk", sans-serif;
+  --font-headline-xl: "Space Grotesk", sans-serif;
+  --font-headline-xl-mobile: "Space Grotesk", sans-serif;
+  --font-headline-lg: "Space Grotesk", sans-serif;
+  --font-headline-md: "Space Grotesk", sans-serif;
+  --font-headline-sm: "Space Grotesk", sans-serif;
+  --font-label-caps: "Space Grotesk", sans-serif;
+  --font-body-lg: "Inter", sans-serif;
+  --font-body-md: "Inter", sans-serif;
+  --font-body-sm: "Inter", sans-serif;
+  --font-label-lg: "JetBrains Mono", monospace;
+  --font-label-md: "JetBrains Mono", monospace;
+
+  /* Typography Sizes & Scale */
+  --text-display-hero: 64px;
+  --text-display-hero--line-height: 68px;
+  --text-display-hero--letter-spacing: -0.03em;
+  --text-display-hero--font-weight: 800;
+
+  --text-display-hero-mobile: 40px;
+  --text-display-hero-mobile--line-height: 44px;
+  --text-display-hero-mobile--letter-spacing: -0.02em;
+  --text-display-hero-mobile--font-weight: 800;
+
+  --text-headline-xl: 44px;
+  --text-headline-xl--line-height: 48px;
+  --text-headline-xl--letter-spacing: -0.02em;
+  --text-headline-xl--font-weight: 700;
+
+  --text-headline-xl-mobile: 32px;
+  --text-headline-xl-mobile--line-height: 36px;
+  --text-headline-xl-mobile--letter-spacing: -0.02em;
+  --text-headline-xl-mobile--font-weight: 700;
+
+  --text-headline-lg: 32px;
+  --text-headline-lg--line-height: 36px;
+  --text-headline-lg--letter-spacing: -0.01em;
+  --text-headline-lg--font-weight: 700;
+
+  --text-headline-md: 24px;
+  --text-headline-md--line-height: 28px;
+  --text-headline-md--letter-spacing: 0em;
+  --text-headline-md--font-weight: 700;
+
+  --text-headline-sm: 18px;
+  --text-headline-sm--line-height: 24px;
+  --text-headline-sm--letter-spacing: 0em;
+  --text-headline-sm--font-weight: 700;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 28px;
+  --text-body-lg--font-weight: 500;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 24px;
+  --text-body-md--font-weight: 400;
+
+  --text-body-sm: 14px;
+  --text-body-sm--line-height: 20px;
+  --text-body-sm--font-weight: 400;
+
+  --text-label-lg: 14px;
+  --text-label-lg--line-height: 18px;
+  --text-label-lg--letter-spacing: 0.05em;
+  --text-label-lg--font-weight: 700;
+
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.04em;
+  --text-label-md--font-weight: 600;
+
+  --text-label-caps: 11px;
+  --text-label-caps--line-height: 14px;
+  --text-label-caps--letter-spacing: 0.08em;
+  --text-label-caps--font-weight: 800;
+
+  /* Spacing Scale */
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-space-2xl: 4rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-gutter-mobile: 1rem;
+  --spacing-margin: 2.5rem;
+  --spacing-margin-mobile: 1.25rem;
+
+  /* Hard Offset Drop Shadows */
+  --shadow-neo-xs: 2px 2px 0px #000000;
+  --shadow-neo-sm: 3px 3px 0px #000000;
+  --shadow-neo-md: 4px 4px 0px #000000;
+  --shadow-neo-lg: 6px 6px 0px #000000;
+  --shadow-neo-xl: 8px 8px 0px #000000;
+}
+
+/* ==========================================================================
+   Global Base & Utility Classes
+   ========================================================================== */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--canvas-bg);
+    color: var(--on-surface);
+    font-family: var(--font-body-md);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background-color: var(--primary-container);
+    color: var(--on-surface);
+  }
+}
+
+/* Neo-Brutalist Mechanical Interaction Utilities */
+.neo-card {
+  background-color: var(--surface-white);
+  border: 2.5px solid #000000;
+  box-shadow: 6px 6px 0px #000000;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.neo-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #000000;
+}
+
+.neo-btn-primary {
+  background-color: var(--primary-container);
+  color: var(--on-surface);
+  border: 2.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  font-family: var(--font-headline-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.neo-btn-primary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000000;
+  background-color: var(--electric-yellow);
+}
+
+.neo-btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+.neo-btn-secondary {
+  background-color: var(--surface-white);
+  color: var(--on-surface);
+  border: 2.5px solid #000000;
+  box-shadow: 4px 4px 0px #000000;
+  font-family: var(--font-headline-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.neo-btn-secondary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0px #000000;
+  background-color: var(--surface-container);
+}
+
+.neo-btn-secondary:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000000;
+}
+
+/* Continuous Infinite Ticker Animation */
+@keyframes textTicker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: textTicker 24s linear infinite;
+}
+
+.ticker-track:hover {
+  animation-play-state: paused;
+}
