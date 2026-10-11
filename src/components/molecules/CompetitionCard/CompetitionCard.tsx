@@ -22,7 +22,7 @@ export default function CompetitionCard({
       <div>
         {/* Banner Artwork Container with 16:9 Aspect Ratio */}
         <div
-          className={`w-full border-b-[2.5px] border-black overflow-hidden ${competition.imageBgColor}`}
+          className="w-full border-b-[2.5px] border-black overflow-hidden bg-slate-100"
           style={{ aspectRatio: "16 / 9" }}
         >
           <img
@@ -79,14 +79,16 @@ export default function CompetitionCard({
               </span>
             </div>
 
-            <Badge
-              color={competition.slotBadge.color}
-              shadow="xs"
-              size="sm"
-              borderWidth="normal"
-            >
-              {competition.slotBadge.label}
-            </Badge>
+            {competition.slotBadgeLabel && (
+              <Badge
+                color="electric-yellow"
+                shadow="xs"
+                size="sm"
+                borderWidth="normal"
+              >
+                {competition.slotBadgeLabel}
+              </Badge>
+            )}
           </Card>
         </div>
       </div>

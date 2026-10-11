@@ -15,11 +15,16 @@ const ID_MONTHS = [
 
 /**
  * Formats a startDate and optional endDate timestamptz into standard uppercase Indonesian date strings.
+ * Supports both single dates ("5 OKTOBER 2026") and ranges ("1 - 30 SEPTEMBER 2026").
  */
-export function formatTimelineDateRange(
-  startDateStr: string | Date,
+export function formatTimelineDate(
+  startDateStr?: string | Date,
   endDateStr?: string | Date
 ): string {
+  if (!startDateStr) {
+    return "";
+  }
+
   const start = new Date(startDateStr);
   if (Number.isNaN(start.getTime())) {
     return "";
@@ -63,26 +68,4 @@ export function formatTimelineDateRange(
 
   // Different year
   return `${startDay} ${startMonth} ${startYear} - ${endDay} ${endMonth} ${endYear}`;
-}
-
-/**
- * Unified timeline date formatter supporting both single dates and date ranges.
- */
-export function formatTimelineDate(step: {
-  date?: string | Date;
-  startDate?: string | Date;
-  endDate?: string | Date;
-}): string {
-  // If single date
-  if (step.date && !step.endDate) {
-    const d = new Date(step.date);
-    if (Number.isNaN(d.getTime())) return "";
-    return `${d.getDate()} ${ID_MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-  }
-
-  // If date range
-  const startStr = step.startDate ?? step.date;
-  if (!startStr) return "";
-
-  return formatTimelineDateRange(startStr, step.endDate);
 }

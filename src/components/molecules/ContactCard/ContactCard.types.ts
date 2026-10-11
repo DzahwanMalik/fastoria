@@ -1,16 +1,14 @@
-import type { ButtonVariant } from "@/components/atoms/Button";
+export type ContactActionVariant = "whatsapp" | "email";
 
 export interface ContactCardItem {
   id: string;
   categoryTag: string;
-  iconName: string;
-  iconColorClass?: string;
   name: string;
   description: string;
   contactValue: string;
   actionLabel: string;
   actionHref: string;
-  actionVariant?: ButtonVariant;
+  actionVariant?: ContactActionVariant;
 }
 
 export interface ContactCardProps {

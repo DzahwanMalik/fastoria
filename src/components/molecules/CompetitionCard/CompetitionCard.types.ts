@@ -1,11 +1,4 @@
-import type { BadgeColor } from "@/components/atoms/Badge";
-
 export type CompetitionCategory = "all" | "design" | "tech" | "business";
-
-export interface CompetitionSlotBadge {
-  label: string;
-  color: BadgeColor;
-}
 
 export interface CompetitionItem {
   id: string;
@@ -14,11 +7,10 @@ export interface CompetitionItem {
   description: string;
   imageSrc: string;
   imageAlt: string;
-  imageBgColor: string;
   tags: string[];
   fee: string;
   feeUnit: string;
-  slotBadge: CompetitionSlotBadge;
+  slotBadgeLabel?: string;
   guidebookUrl?: string;
 }
 

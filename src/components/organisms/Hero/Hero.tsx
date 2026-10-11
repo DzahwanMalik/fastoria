@@ -1,12 +1,11 @@
 import type { JSX } from "react";
-import { FiArrowRight, FiAward, FiFileText, FiUsers } from "react-icons/fi";
+import { FiArrowRight, FiFileText } from "react-icons/fi";
 
 import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
 import CountdownTimer from "@/components/molecules/CountdownTimer";
 import HeroArtwork from "@/components/molecules/HeroArtwork";
-import HighlightItem from "@/components/molecules/HighlightItem";
 
 import type { HeroProps } from "./Hero.types";
 
@@ -77,18 +76,6 @@ export default function Hero({ onRegisterClick }: HeroProps = {}): JSX.Element {
                 <FiFileText className="text-lg text-tertiary" />
                 <span>Unduh Rulebook (PDF)</span>
               </Button>
-            </div>
-
-            {/* Micro Highlights with HighlightItem Molecules */}
-            <div className="mt-8 pt-6 border-t-2 border-surface-container flex flex-wrap items-center gap-6 text-on-surface-variant font-label-md text-xs sm:text-sm">
-              <HighlightItem
-                icon={<FiUsers className="text-secondary" />}
-                label="500+ Tim Berpartisipasi"
-              />
-              <HighlightItem
-                icon={<FiAward className="text-tertiary" />}
-                label="Sertifikat Berlisensi Nasional"
-              />
             </div>
           </div>
 

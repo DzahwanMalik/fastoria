@@ -1,15 +1,15 @@
-import { formatTimelineDate, formatTimelineDateRange } from "@/utils/date";
+import { formatTimelineDate } from "@/utils/date";
 
 import type { TimelineStepItem } from "./TimelineStepCard.types";
 
-export { formatTimelineDate, formatTimelineDateRange };
+export { formatTimelineDate };
 
 /**
  * Checks whether a timeline step is currently active based on an optional reference date.
  * - If `step.isActive` is explicitly defined, that boolean is respected.
- * - If `step.date` is provided without `endDate` (single-day event), it checks if `referenceDate`
- *   falls on the same calendar day.
- * - If `startDate` and/or `endDate` are provided (date range), it checks if `referenceDate`
+ * - If `step.endDate` is omitted (single-day event), it checks if `referenceDate`
+ *   falls on the same calendar day as `step.startDate`.
+ * - If `step.endDate` is provided (date range), it checks if `referenceDate`
  *   falls within [startDate, endDate].
  */
 export function isTimelineStepActive(
@@ -21,8 +21,8 @@ export function isTimelineStepActive(
   }
 
   // Single date event (match calendar day)
-  if (step.date && !step.endDate) {
-    const eventDate = new Date(step.date);
+  if (!step.endDate) {
+    const eventDate = new Date(step.startDate);
     if (Number.isNaN(eventDate.getTime())) {
       return false;
     }
@@ -35,18 +35,13 @@ export function isTimelineStepActive(
   }
 
   // Date range event
-  const startStr = step.startDate ?? step.date;
-  if (!startStr && !step.endDate) {
-    return false;
-  }
-
-  const now = referenceDate.getTime();
-  const start = startStr ? new Date(startStr).getTime() : -Infinity;
-  const end = step.endDate ? new Date(step.endDate).getTime() : Infinity;
+  const start = new Date(step.startDate).getTime();
+  const end = new Date(step.endDate).getTime();
 
   if (Number.isNaN(start) || Number.isNaN(end)) {
     return false;
   }
 
+  const now = referenceDate.getTime();
   return now >= start && now <= end;
 }

@@ -18,19 +18,11 @@ export default function ContactCard({
       className={`p-6 flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 hover:shadow-neo-lg ${className}`.trim()}
     >
       <div>
-        {/* Header Category Tag & Icon */}
-        <div className="flex items-center justify-between mb-4">
+        {/* Header Category Tag */}
+        <div className="flex items-center mb-4">
           <Badge color="white" shadow="none" size="sm" borderWidth="normal">
             {contact.categoryTag}
           </Badge>
-          <span
-            className={`material-symbols-outlined text-2xl select-none ${
-              contact.iconColorClass ?? "text-on-surface"
-            }`}
-            aria-hidden="true"
-          >
-            {contact.iconName}
-          </span>
         </div>
 
         {/* Contact Person Name */}
@@ -49,9 +41,9 @@ export default function ContactCard({
         </span>
       </div>
 
-      {/* Action Button Atom (WhatsApp / Email) */}
+      {/* Action Button Atom (WhatsApp / Email styling handled by frontend) */}
       <Button
-        variant={contact.actionVariant ?? "mint"}
+        variant={contact.actionVariant === "email" ? "cyan" : "mint"}
         size="sm"
         href={contact.actionHref}
         target="_blank"

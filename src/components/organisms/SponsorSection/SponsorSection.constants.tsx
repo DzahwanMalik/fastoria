@@ -4,7 +4,8 @@ export interface SponsorItem {
   id: string;
   name: string;
   url?: string;
-  logo: ReactNode;
+  logo?: ReactNode;
+  logoSrc?: string;
 }
 
 export const DEFAULT_SPONSORS: SponsorItem[] = [

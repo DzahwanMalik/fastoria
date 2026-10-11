@@ -21,7 +21,7 @@ export default function TimelineStepCard({
   const descColorClass = active ? "text-on-surface" : "text-on-surface-variant";
   const shadow = active ? "lg" : "md";
 
-  const formattedDate = formatTimelineDate(step);
+  const formattedDate = formatTimelineDate(step.startDate, step.endDate);
 
   return (
     <Card
@@ -38,7 +38,7 @@ export default function TimelineStepCard({
           shadow="xs"
           className="w-8 h-8 flex items-center justify-center font-headline-sm text-headline-sm mb-4"
         >
-          {step.stepNumber}
+          {String(step.stepNumber).padStart(2, "0")}
         </Card>
 
         {/* Milestone Date (Auto-formatted for single date or range) */}

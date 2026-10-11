@@ -7,17 +7,13 @@ export interface TimelineStepBadge {
 }
 
 export interface TimelineStepItem {
-  stepNumber: string;
+  stepNumber: number;
   title: string;
   description: string;
   /**
-   * For single-day events (e.g. "2026-10-05T00:00:00+07:00")
+   * Event date (single-day) or start of range (e.g. "2026-09-01T00:00:00+07:00")
    */
-  date?: string | Date;
-  /**
-   * For multi-day range events (e.g. "2026-09-01T00:00:00+07:00")
-   */
-  startDate?: string | Date;
+  startDate: string | Date;
   /**
    * End boundary for multi-day range events (e.g. "2026-09-30T23:59:59+07:00")
    */

@@ -34,7 +34,6 @@ export default function FaqAccordion({
           <details
             key={item.id ?? index}
             className="group p-4 cursor-pointer select-none transition-colors hover:bg-surface-container-low"
-            open={item.defaultOpen}
           >
             <summary className="font-headline-sm text-headline-sm text-on-surface list-none flex items-center justify-between gap-4">
               <span>{item.question}</span>

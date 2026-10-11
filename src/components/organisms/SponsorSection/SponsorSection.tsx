@@ -33,6 +33,7 @@ export default function SponsorSection({
                 key={`sponsor-t1-${sponsor.id}-${idx}`}
                 name={sponsor.name}
                 url={sponsor.url}
+                logoSrc={sponsor.logoSrc}
               >
                 {sponsor.logo}
               </SponsorLogo>
@@ -49,6 +50,7 @@ export default function SponsorSection({
                 key={`sponsor-t2-${sponsor.id}-${idx}`}
                 name={sponsor.name}
                 url={sponsor.url}
+                logoSrc={sponsor.logoSrc}
               >
                 {sponsor.logo}
               </SponsorLogo>
