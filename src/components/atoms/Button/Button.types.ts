@@ -18,6 +18,7 @@ export interface ButtonProps {
   children: ReactNode;
   className?: string;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
   target?: string;
   rel?: string;
   ariaLabel?: string;

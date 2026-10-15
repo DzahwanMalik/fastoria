@@ -10,6 +10,7 @@ export default function Button({
   children,
   className = "",
   type = "button",
+  disabled = false,
   target,
   rel,
   ariaLabel,
@@ -34,17 +35,18 @@ export default function Button({
     cyan: "bg-electric-cyan text-on-surface hover:bg-electric-yellow",
   };
 
-  const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${className}`.trim();
+  const combinedClasses = `${baseClasses} ${sizeClasses[size]} ${variantClasses[variant]} ${disabled ? "opacity-60 pointer-events-none" : ""} ${className}`.trim();
   const label = ariaLabel ?? ariaLabelProp;
 
   if (href) {
     return (
       <a
         href={href}
-        onClick={onClick}
+        onClick={disabled ? undefined : onClick}
         target={target}
         rel={rel}
         aria-label={label}
+        aria-disabled={disabled || undefined}
         className={combinedClasses}
       >
         {children}
@@ -56,6 +58,8 @@ export default function Button({
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
+      aria-busy={disabled || undefined}
       aria-label={label}
       className={combinedClasses}
     >
