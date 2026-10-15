@@ -82,8 +82,8 @@ export const QUICK_ACTIONS: QuickActionConfig[] = [
   {
     id: "event-settings",
     title: "Pengaturan Event",
-    description: "Perbarui info dan hadiah pada event_settings.",
+    description: "Perbarui info, kontak, dan hadiah pada event_settings.",
     icon: FiSettings,
-    disabled: true,
+    to: "/admin/pengaturan",
   },
 ];

@@ -69,7 +69,7 @@ export default function Modal({
     <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/50">
       <div
         onClick={handleBackdropClick}
-        className="flex min-h-full items-start justify-center p-4 sm:items-center"
+        className="flex min-h-full items-start justify-center p-4"
       >
         <div
           ref={panelRef}
@@ -78,7 +78,7 @@ export default function Modal({
           aria-labelledby={titleId}
           aria-describedby={description ? descriptionId : undefined}
           tabIndex={-1}
-          className={`w-full ${SIZE_MAP[size]} border-[3px] border-black bg-surface-white shadow-neo-lg outline-none ${className}`.trim()}
+          className={`my-auto w-full ${SIZE_MAP[size]} border-[3px] border-black bg-surface-white shadow-neo-lg outline-none ${className}`.trim()}
         >
           <div className="flex items-start justify-between gap-4 border-b-[3px] border-black px-6 py-4">
             <div className="min-w-0">

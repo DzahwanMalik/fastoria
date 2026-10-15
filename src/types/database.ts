@@ -63,6 +63,7 @@ export type Database = {
           description: string;
           guidebook_link: string;
           id: string;
+          image_url: string | null;
           registration_fee: number;
           registration_link: string;
           teams: number | null;
@@ -75,6 +76,7 @@ export type Database = {
           description: string;
           guidebook_link: string;
           id?: string;
+          image_url?: string | null;
           registration_fee: number;
           registration_link: string;
           teams?: number | null;
@@ -87,6 +89,7 @@ export type Database = {
           description?: string;
           guidebook_link?: string;
           id?: string;
+          image_url?: string | null;
           registration_fee?: number;
           registration_link?: string;
           teams?: number | null;
@@ -111,6 +114,7 @@ export type Database = {
           event_description: string;
           event_name: string;
           id: string;
+          logo_url: string | null;
           prize_pool: number;
           social_media: Json[];
           timeline: Json[];
@@ -124,6 +128,7 @@ export type Database = {
           event_description: string;
           event_name: string;
           id?: string;
+          logo_url?: string | null;
           prize_pool: number;
           social_media?: Json[];
           timeline?: Json[];
@@ -137,6 +142,7 @@ export type Database = {
           event_description?: string;
           event_name?: string;
           id?: string;
+          logo_url?: string | null;
           prize_pool?: number;
           social_media?: Json[];
           timeline?: Json[];

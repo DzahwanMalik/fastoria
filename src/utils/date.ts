@@ -69,3 +69,33 @@ export function formatTimelineDate(
   // Different year
   return `${startDay} ${startMonth} ${startYear} - ${endDay} ${endMonth} ${endYear}`;
 }
+
+/**
+ * Formats a timestamptz into a readable Indonesian date + time string,
+ * e.g. "15 Oktober 2026 pukul 22.27". Returns an empty string for invalid
+ * input so callers can omit the line entirely.
+ */
+export function formatDateTime(value?: string | Date): string {
+  if (!value) {
+    return "";
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  const datePart = new Intl.DateTimeFormat("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+
+  const timePart = new Intl.DateTimeFormat("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+
+  return `${datePart} pukul ${timePart}`;
+}

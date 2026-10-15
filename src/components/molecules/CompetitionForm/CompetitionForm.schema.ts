@@ -21,6 +21,8 @@ export const competitionSchema = z.object({
     .url("Format link guidebook tidak valid."),
   teams: z.string().regex(/^\d*$/, "Jumlah anggota harus berupa angka."),
   category_id: z.string(),
+  /** Storage URL; managed by `ImageUploadField`, not by a text input. */
+  image_url: z.string(),
 });
 
 export type CompetitionFormValues = z.infer<typeof competitionSchema>;
@@ -33,4 +35,5 @@ export const COMPETITION_FORM_DEFAULTS: CompetitionFormValues = {
   guidebook_link: "",
   teams: "",
   category_id: "",
+  image_url: "",
 };

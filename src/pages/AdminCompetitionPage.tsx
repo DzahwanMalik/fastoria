@@ -5,6 +5,7 @@ import {
   FiEdit2,
   FiExternalLink,
   FiFilter,
+  FiImage,
   FiPlus,
   FiRefreshCw,
   FiTrash2,
@@ -24,6 +25,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { useCompetitions } from "@/hooks/useCompetitions";
 import type { Tables, TablesInsert } from "@/types/database";
 import { formatRupiah } from "@/utils/currency";
+import { removeMediaByUrl, toStoredImageUrl } from "@/utils/storage";
 import { supabase } from "@/utils/supabase";
 
 import type { CompetitionFilterOption } from "./AdminCompetitionPage.constants";
@@ -46,6 +48,7 @@ const toFormValues = (competition: Competition): CompetitionFormValues => ({
   guidebook_link: competition.guidebook_link,
   teams: competition.teams === null ? "" : String(competition.teams),
   category_id: competition.category_id ?? "",
+  image_url: competition.image_url ?? "",
 });
 
 const toPayload = (
@@ -58,6 +61,7 @@ const toPayload = (
   guidebook_link: values.guidebook_link,
   teams: values.teams ? Number(values.teams) : null,
   category_id: values.category_id ? values.category_id : null,
+  image_url: toStoredImageUrl(values.image_url),
 });
 
 export default function AdminCompetitionPage(): JSX.Element {
@@ -162,6 +166,7 @@ export default function AdminCompetitionPage(): JSX.Element {
     setIsSaving(true);
 
     const payload = toPayload(values);
+    const previousImageUrl = editingCompetition?.image_url ?? null;
     const { error: saveError } = editingId
       ? await supabase.from("competitions").update(payload).eq("id", editingId)
       : await supabase.from("competitions").insert(payload);
@@ -175,6 +180,11 @@ export default function AdminCompetitionPage(): JSX.Element {
           : "Gagal menyimpan lomba. Coba lagi.",
       );
       return;
+    }
+
+    // Best-effort: drop the replaced file so the bucket does not grow forever.
+    if (previousImageUrl && previousImageUrl !== payload.image_url) {
+      await removeMediaByUrl(previousImageUrl);
     }
 
     toast.success(
@@ -202,6 +212,9 @@ export default function AdminCompetitionPage(): JSX.Element {
       toast.error("Gagal menghapus lomba. Coba lagi.");
       return;
     }
+
+    // Best-effort cleanup of the image that belonged to the deleted row.
+    await removeMediaByUrl(deleteTarget.image_url);
 
     toast.success(`"${deleteTarget.title}" berhasil dihapus.`);
     setDeleteTarget(null);
@@ -351,9 +364,26 @@ export default function AdminCompetitionPage(): JSX.Element {
                 <li key={competition.id}>
                   <Card shadow="sm" className="flex flex-col gap-3 p-5">
                     <div className="flex flex-wrap items-start justify-between gap-3">
-                      <h2 className="font-headline-sm text-headline-sm uppercase tracking-tight">
-                        {competition.title}
-                      </h2>
+                      <div className="flex min-w-0 items-start gap-4">
+                        {competition.image_url ? (
+                          <img
+                            src={competition.image_url}
+                            alt={competition.title}
+                            className="h-16 w-24 shrink-0 border-[2.5px] border-black object-cover"
+                          />
+                        ) : (
+                          <div
+                            aria-hidden="true"
+                            className="flex h-16 w-24 shrink-0 items-center justify-center border-[2.5px] border-black bg-surface-container text-on-surface-variant"
+                          >
+                            <FiImage size={18} />
+                          </div>
+                        )}
+
+                        <h2 className="font-headline-sm text-headline-sm uppercase tracking-tight">
+                          {competition.title}
+                        </h2>
+                      </div>
 
                       <div className="flex flex-wrap items-center gap-2">
                         <Button

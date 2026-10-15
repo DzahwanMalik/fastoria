@@ -2,7 +2,9 @@
 
 Desain database untuk CMS dashboard yang mengelola konten LandingPage.
 Dokumen ini **mencerminkan schema aktual** di project Supabase
-`xhptzjvzqvosfmaklqgx` (dibuat manual via dashboard, belum ada migration).
+`xhptzjvzqvosfmaklqgx`. Tabel awal dibuat manual via dashboard; perubahan
+berikutnya (kolom `image_url`, `logo_url`, bucket `media`) lewat migration
+`add_media_images_and_storage_bucket`.
 
 Filosofi: **sesimpel mungkin**. Hanya konten tertentu yang dikelola lewat
 dashboard; semua yang berkaitan dengan tampilan (badge, warna, ikon, label
@@ -42,6 +44,7 @@ erDiagram
         integer registration_fee
         text registration_link
         text guidebook_link
+        text image_url
         integer teams
         uuid category_id FK
         timestamptz created_at
@@ -54,6 +57,7 @@ erDiagram
         integer prize_pool
         text venue_name
         text address
+        text logo_url
         jsonb contact
         jsonb timeline
         jsonb social_media
@@ -108,6 +112,7 @@ Dipakai frontend untuk membangun tab filter.
 | `registration_fee` | `integer` | tidak | — | biaya pendaftaran (rupiah) |
 | `registration_link` | `text` | tidak | — | link pendaftaran |
 | `guidebook_link` | `text` | tidak | — | link guidebook/rulebook |
+| `image_url` | `text` | ya | — | **public URL** foto lomba di bucket Storage `media` (lihat 4); `null` = belum ada foto |
 | `teams` | `integer` | ya | — | jumlah anggota tim; `2` = lomba 2 orang; `null`/`1` = individu |
 | `category_id` | `uuid` | ya | — | FK → `categories(id)`; `null` = tanpa kategori |
 | `created_at` | `timestamptz` | tidak | `now()` | |
@@ -126,6 +131,7 @@ Dipakai frontend untuk membangun tab filter.
 | `prize_pool` | `integer` | tidak | — | total hadiah (rupiah) |
 | `venue_name` | `text` | tidak | — | nama venue/sekretariat |
 | `address` | `text` | tidak | — | alamat |
+| `logo_url` | `text` | ya | — | **public URL** logo event di bucket Storage `media` (lihat 4); `null` = belum ada logo |
 | `contact` | `jsonb[]` | tidak | `'{}'` | array objek kontak (lihat 3.1) |
 | `timeline` | `jsonb[]` | tidak | `'{}'` | array objek milestone (lihat 3.2) |
 | `social_media` | `jsonb[]` | tidak | `'{}'` | array objek sosial media (lihat 3.3) |
@@ -217,6 +223,37 @@ Arti praktis:
 > exists (select 1 from public.admins a where a.id = auth.uid())
 > ```
 
+### Storage (bucket `media`)
+
+Foto lomba dan logo event **tidak** disimpan sebagai bytea di tabel. Tabel hanya
+menyimpan **public URL**, sedangkan filenya ada di Supabase Storage:
+
+| Item | Nilai |
+|---|---|
+| Bucket | `media` (public) |
+| Folder | `competitions/` untuk foto lomba, `event-settings/` untuk logo event |
+| Nama objek | `<uuid>.<ext>` (acak, jadi cache `31536000` detik aman) |
+| Batas ukuran | 5 MB |
+| MIME diizinkan | `image/jpeg`, `image/png`, `image/webp`, `image/svg+xml` |
+
+Policy pada `storage.objects`:
+
+| Policy | Role | Command | Kondisi |
+|---|---|---|---|
+| `media_public_read` | `authenticated` | SELECT | `bucket_id = 'media'` |
+| `media_authenticated_insert` | `authenticated` | INSERT | `bucket_id = 'media'` |
+| `media_authenticated_update` | `authenticated` | UPDATE | `bucket_id = 'media'` |
+| `media_authenticated_delete` | `authenticated` | DELETE | `bucket_id = 'media'` |
+
+- File disajikan lewat route **public object** (`/storage/v1/object/public/media/...`),
+  yang tidak lewat RLS — jadi `anon` tetap bisa memuat gambar tanpa policy SELECT.
+  SELECT sengaja dibatasi ke `authenticated` supaya `anon` tidak bisa
+  *mendaftar* isi bucket.
+- Upload/ganti/hapus hanya untuk `authenticated` (di app ini = admin).
+- Alur app: file di-upload **saat submit form**, bukan saat memilih file, supaya
+  batal menutup modal tidak meninggalkan file yatim. File lama dihapus
+  best-effort setelah update/delete baris berhasil.
+
 ### Advisor (per saat ini)
 
 - **Security:** bersih (tidak ada temuan).
@@ -273,6 +310,7 @@ create table public.competitions (
   registration_fee   integer not null,
   registration_link  text not null,
   guidebook_link     text not null,
+  image_url          text,
   teams              integer,
   category_id        uuid references public.categories(id),
   created_at         timestamptz not null default now(),
@@ -295,6 +333,7 @@ create table public.event_settings (
   prize_pool         integer not null,
   venue_name         text not null,
   address            text not null,
+  logo_url           text,
   contact            jsonb[] not null default '{}'::jsonb[],
   timeline           jsonb[] not null default '{}'::jsonb[],
   social_media       jsonb[] not null default '{}'::jsonb[],

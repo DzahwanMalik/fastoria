@@ -6,5 +6,5 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
   { label: "Dashboard", to: "/admin", icon: FiGrid },
   { label: "Lomba", to: "/admin/lomba", icon: FiAward },
   { label: "Kategori", to: "/admin/kategori", icon: FiTag },
-  { label: "Pengaturan", to: "/admin/pengaturan", icon: FiSettings, disabled: true },
+  { label: "Pengaturan", to: "/admin/pengaturan", icon: FiSettings },
 ];

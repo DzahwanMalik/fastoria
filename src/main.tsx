@@ -7,6 +7,7 @@ import AdminLayout from "@/layouts/AdminLayout";
 import AdminCategoryPage from "@/pages/AdminCategoryPage";
 import AdminCompetitionPage from "@/pages/AdminCompetitionPage";
 import AdminDashboardPage from "@/pages/AdminDashboardPage";
+import AdminEventSettingsPage from "@/pages/AdminEventSettingsPage";
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
 import ProtectedRoute from "@/routes/ProtectedRoute";
@@ -27,6 +28,10 @@ createRoot(document.getElementById("root")!).render(
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="/admin/lomba" element={<AdminCompetitionPage />} />
             <Route path="/admin/kategori" element={<AdminCategoryPage />} />
+            <Route
+              path="/admin/pengaturan"
+              element={<AdminEventSettingsPage />}
+            />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
