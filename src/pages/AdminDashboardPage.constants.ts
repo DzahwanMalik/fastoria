@@ -52,20 +52,25 @@ export interface QuickActionConfig {
   title: string;
   description: string;
   icon: IconType;
+  /** Set when the target admin module exists; renders the tile as a link. */
+  to?: string;
+  /** Router state forwarded to {@link QuickActionConfig.to}, e.g. to open a form. */
+  state?: { create?: boolean };
   disabled?: boolean;
 }
 
 /**
- * Shortcut tiles for the dashboard. Disabled until the matching admin module
- * (and its route) exists.
+ * Shortcut tiles for the dashboard. Tiles without a `to` target stay disabled
+ * until the matching admin module (and its route) exists.
  */
 export const QUICK_ACTIONS: QuickActionConfig[] = [
   {
     id: "add-competition",
     title: "Tambah Lomba",
-    description: "Buat entri baru pada tabel competitions.",
+    description: "Buka modul lomba dan entri baru pada tabel competitions.",
     icon: FiPlus,
-    disabled: true,
+    to: "/admin/lomba",
+    state: { create: true },
   },
   {
     id: "manage-categories",

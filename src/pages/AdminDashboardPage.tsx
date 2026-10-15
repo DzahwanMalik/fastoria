@@ -1,6 +1,7 @@
 import type { JSX } from "react";
 import { useMemo } from "react";
 import { FiRefreshCw } from "react-icons/fi";
+import { Link } from "react-router";
 
 import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
@@ -26,6 +27,11 @@ export default function AdminDashboardPage(): JSX.Element {
       prize: formatRupiah(stats.prizePool),
     }),
     [stats],
+  );
+
+  const hasPendingActions = useMemo(
+    () => QUICK_ACTIONS.some((action) => !action.to),
+    [],
   );
 
   return (
@@ -102,22 +108,21 @@ export default function AdminDashboardPage(): JSX.Element {
               <h2 className="font-headline-sm text-headline-sm uppercase tracking-tight">
                 Aksi Cepat
               </h2>
-              <Badge color="surface-container" size="sm" shadow="none">
-                Segera
-              </Badge>
+
+              {hasPendingActions && (
+                <Badge color="surface-container" size="sm" shadow="none">
+                  Segera
+                </Badge>
+              )}
             </div>
 
             <div className="grid grid-cols-1 gap-gutter sm:grid-cols-2 lg:grid-cols-3">
               {QUICK_ACTIONS.map((action) => {
                 const Icon = action.icon;
-
-                return (
-                  <button
-                    key={action.id}
-                    type="button"
-                    disabled={action.disabled}
-                    className="flex items-start gap-3 border-2 border-black bg-surface-container-low p-4 text-left transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-surface-container-low"
-                  >
+                const tileClass =
+                  "flex items-start gap-3 border-2 border-black bg-surface-container-low p-4 text-left transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-surface-container-low";
+                const content = (
+                  <>
                     <span className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-black bg-surface-white shadow-neo-xs">
                       <Icon aria-hidden="true" size={18} />
                     </span>
@@ -130,6 +135,30 @@ export default function AdminDashboardPage(): JSX.Element {
                         {action.description}
                       </span>
                     </span>
+                  </>
+                );
+
+                if (action.to) {
+                  return (
+                    <Link
+                      key={action.id}
+                      to={action.to}
+                      state={action.state}
+                      className={tileClass}
+                    >
+                      {content}
+                    </Link>
+                  );
+                }
+
+                return (
+                  <button
+                    key={action.id}
+                    type="button"
+                    disabled={action.disabled}
+                    className={tileClass}
+                  >
+                    {content}
                   </button>
                 );
               })}
