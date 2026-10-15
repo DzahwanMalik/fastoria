@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import { useMemo, useState } from "react";
-import { FiAlertCircle, FiEdit2, FiRefreshCw } from "react-icons/fi";
+import { FiRefreshCw } from "react-icons/fi";
 import type { PostgrestError } from "@supabase/supabase-js";
 import { toast } from "sonner";
 
@@ -15,7 +15,6 @@ import type {
 } from "@/components/molecules/EventSettingsForms";
 import {
   ContactForm,
-  EVENT_INFO_DEFAULTS,
   EventInfoForm,
   SocialMediaForm,
   TimelineForm,
@@ -23,11 +22,12 @@ import {
 import EventSettingsSummary from "@/components/molecules/EventSettingsSummary";
 import Modal from "@/components/molecules/Modal";
 import { useEventSettings } from "@/hooks/useEventSettings";
+import type { TablesUpdate } from "@/types/database";
 import { formatDateTime } from "@/utils/date";
 import {
   toContactUpdate,
-  toEventInfoInsert,
   toEventInfoUpdate,
+  toEventSettingsInsert,
   toEventSettingsValues,
   toSocialMediaUpdate,
   toTimelineUpdate,
@@ -35,17 +35,22 @@ import {
 import { removeMediaByUrl, toStoredImageUrl } from "@/utils/storage";
 import { supabase } from "@/utils/supabase";
 
-import { EVENT_SETTINGS_SECTION_META } from "./AdminEventSettingsPage.constants";
+import {
+  EMPTY_EVENT_SETTINGS_VALUES,
+  EVENT_SETTINGS_SECTION_META,
+} from "./AdminEventSettingsPage.constants";
 
 export default function AdminEventSettingsPage(): JSX.Element {
   const { settings, isLoading, error, refetch } = useEventSettings();
-  const [activeSection, setActiveSection] = useState<EventSettingsSection | null>(
-    null,
-  );
+  const [activeSection, setActiveSection] =
+    useState<EventSettingsSection | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   const values = useMemo(
-    () => (settings ? toEventSettingsValues(settings) : null),
+    () =>
+      settings
+        ? toEventSettingsValues(settings)
+        : EMPTY_EVENT_SETTINGS_VALUES,
     [settings],
   );
 
@@ -56,31 +61,35 @@ export default function AdminEventSettingsPage(): JSX.Element {
 
   const closeForm = () => setActiveSection(null);
 
+  /**
+   * Every section writes on its own: the row is updated when it exists and
+   * created (with the remaining sections left empty) when it does not, so no
+   * section needs a separate "create" entry point.
+   */
+  const saveSection = async (payload: TablesUpdate<"event_settings">) =>
+    settings
+      ? supabase.from("event_settings").update(payload).eq("id", settings.id)
+      : supabase.from("event_settings").insert(toEventSettingsInsert(payload));
+
   const finishSave = (saveError: PostgrestError | null, message: string) => {
     if (saveError) {
       toast.error("Gagal menyimpan pengaturan event. Coba lagi.");
       return;
     }
 
-    toast.success(message);
+    toast.success(
+      settings === null ? "Pengaturan event berhasil dibuat." : message,
+    );
     closeForm();
     refetch();
   };
 
   const handleInfoSubmit = async (infoValues: EventInfoValues) => {
-    const isCreating = settings === null;
     const previousLogoUrl = settings?.logo_url ?? null;
     setIsSaving(true);
-
-    const { error: saveError } = isCreating
-      ? await supabase
-          .from("event_settings")
-          .insert(toEventInfoInsert(infoValues))
-      : await supabase
-          .from("event_settings")
-          .update(toEventInfoUpdate(infoValues))
-          .eq("id", settings.id);
-
+    const { error: saveError } = await saveSection(
+      toEventInfoUpdate(infoValues),
+    );
     setIsSaving(false);
 
     if (!saveError && previousLogoUrl !== toStoredImageUrl(infoValues.logo_url)) {
@@ -88,39 +97,20 @@ export default function AdminEventSettingsPage(): JSX.Element {
       await removeMediaByUrl(previousLogoUrl);
     }
 
-    finishSave(
-      saveError,
-      isCreating
-        ? "Pengaturan event berhasil dibuat."
-        : "Informasi event berhasil diperbarui.",
-    );
+    finishSave(saveError, "Informasi event berhasil diperbarui.");
   };
 
   const handleContactSubmit = async ({ contact }: ContactListValues) => {
-    if (!settings) {
-      return;
-    }
-
     setIsSaving(true);
-    const { error: saveError } = await supabase
-      .from("event_settings")
-      .update(toContactUpdate(contact))
-      .eq("id", settings.id);
+    const { error: saveError } = await saveSection(toContactUpdate(contact));
     setIsSaving(false);
 
     finishSave(saveError, "Kontak berhasil diperbarui.");
   };
 
   const handleTimelineSubmit = async ({ timeline }: TimelineListValues) => {
-    if (!settings) {
-      return;
-    }
-
     setIsSaving(true);
-    const { error: saveError } = await supabase
-      .from("event_settings")
-      .update(toTimelineUpdate(timeline))
-      .eq("id", settings.id);
+    const { error: saveError } = await saveSection(toTimelineUpdate(timeline));
     setIsSaving(false);
 
     finishSave(saveError, "Timeline berhasil diperbarui.");
@@ -129,15 +119,10 @@ export default function AdminEventSettingsPage(): JSX.Element {
   const handleSocialMediaSubmit = async ({
     social_media,
   }: SocialMediaListValues) => {
-    if (!settings) {
-      return;
-    }
-
     setIsSaving(true);
-    const { error: saveError } = await supabase
-      .from("event_settings")
-      .update(toSocialMediaUpdate(social_media))
-      .eq("id", settings.id);
+    const { error: saveError } = await saveSection(
+      toSocialMediaUpdate(social_media),
+    );
     setIsSaving(false);
 
     finishSave(saveError, "Sosial media berhasil diperbarui.");
@@ -145,32 +130,14 @@ export default function AdminEventSettingsPage(): JSX.Element {
 
   return (
     <>
-      <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-headline-xl text-headline-xl uppercase tracking-tight">
-            Pengaturan
-          </h1>
-          <p className="mt-1 font-body-md text-body-md text-on-surface-variant">
-            Informasi event yang tampil di halaman publik.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-3">
-          <Button variant="secondary" size="md" onClick={refetch}>
-            <FiRefreshCw aria-hidden="true" />
-            Muat ulang
-          </Button>
-
-          <Button
-            variant="primary"
-            size="md"
-            disabled={isLoading || Boolean(error)}
-            onClick={() => setActiveSection("info")}
-          >
-            <FiEdit2 aria-hidden="true" />
-            {settings ? "Edit Pengaturan" : "Buat Pengaturan"}
-          </Button>
-        </div>
+      <header className="mb-8">
+        <h1 className="font-headline-xl text-headline-xl uppercase tracking-tight">
+          Pengaturan
+        </h1>
+        <p className="mt-1 font-body-md text-body-md text-on-surface-variant">
+          Informasi event yang tampil di halaman publik. Setiap bagian
+          disimpan sendiri lewat tombol Edit di kartunya.
+        </p>
       </header>
 
       {isLoading && (
@@ -194,22 +161,7 @@ export default function AdminEventSettingsPage(): JSX.Element {
         </Card>
       )}
 
-      {!isLoading && !error && !values && (
-        <Card
-          shadow="md"
-          className="flex flex-col items-center gap-3 p-10 text-center"
-        >
-          <FiAlertCircle aria-hidden="true" size={24} />
-          <p className="font-headline-sm text-headline-sm uppercase tracking-tight">
-            Belum ada pengaturan event
-          </p>
-          <p className="font-body-sm text-body-sm text-on-surface-variant">
-            Buat pengaturan pertama lewat tombol di atas.
-          </p>
-        </Card>
-      )}
-
-      {!isLoading && !error && values && (
+      {!isLoading && !error && (
         <>
           {lastUpdated && (
             <p className="mb-6 font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant">
@@ -234,8 +186,8 @@ export default function AdminEventSettingsPage(): JSX.Element {
         {activeSection === "info" && (
           <EventInfoForm
             key={settings?.id ?? "new"}
-            defaultValues={values?.info ?? EVENT_INFO_DEFAULTS}
-            submitLabel={settings ? "Simpan Perubahan" : "Buat Pengaturan"}
+            defaultValues={values.info}
+            submitLabel={settings ? "Simpan Perubahan" : "Simpan Informasi"}
             isLoading={isSaving}
             onSubmit={handleInfoSubmit}
             onCancel={closeForm}
@@ -245,7 +197,7 @@ export default function AdminEventSettingsPage(): JSX.Element {
         {activeSection === "contact" && (
           <ContactForm
             key={settings?.id ?? "new"}
-            defaultValues={{ contact: values?.contact ?? [] }}
+            defaultValues={{ contact: values.contact }}
             isLoading={isSaving}
             onSubmit={handleContactSubmit}
             onCancel={closeForm}
@@ -255,7 +207,7 @@ export default function AdminEventSettingsPage(): JSX.Element {
         {activeSection === "timeline" && (
           <TimelineForm
             key={settings?.id ?? "new"}
-            defaultValues={{ timeline: values?.timeline ?? [] }}
+            defaultValues={{ timeline: values.timeline }}
             isLoading={isSaving}
             onSubmit={handleTimelineSubmit}
             onCancel={closeForm}
@@ -265,7 +217,7 @@ export default function AdminEventSettingsPage(): JSX.Element {
         {activeSection === "social_media" && (
           <SocialMediaForm
             key={settings?.id ?? "new"}
-            defaultValues={{ social_media: values?.social_media ?? [] }}
+            defaultValues={{ social_media: values.social_media }}
             isLoading={isSaving}
             onSubmit={handleSocialMediaSubmit}
             onCancel={closeForm}

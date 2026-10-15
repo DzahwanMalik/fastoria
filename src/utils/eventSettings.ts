@@ -103,20 +103,30 @@ const withTimestamp = <T extends object>(payload: T): T & { updated_at: string }
   updated_at: new Date().toISOString(),
 });
 
-/** Full insert payload — only the info section is required to create the row. */
-export const toEventInfoInsert = (
-  values: EventInfoValues,
+/**
+ * Insert payload for a section save when the singleton row does not exist yet.
+ * `event_name`, `event_description`, `venue_name`, `address` and `prize_pool`
+ * are `not null` without a default, so they start empty and are filled in
+ * later from the info card.
+ */
+const EVENT_SETTINGS_INSERT_FALLBACK = {
+  event_name: "",
+  event_description: "",
+  prize_pool: 0,
+  venue_name: "",
+  address: "",
+  logo_url: null,
+};
+
+export const toEventSettingsInsert = (
+  payload: TablesUpdate<"event_settings">,
 ): TablesInsert<"event_settings"> =>
   withTimestamp({
-    event_name: values.event_name,
-    event_description: values.event_description,
-    prize_pool: Number(values.prize_pool),
-    venue_name: values.venue_name,
-    address: values.address,
-    logo_url: toStoredImageUrl(values.logo_url),
+    ...EVENT_SETTINGS_INSERT_FALLBACK,
     contact: [],
     timeline: [],
     social_media: [],
+    ...payload,
   });
 
 export const toEventInfoUpdate = (

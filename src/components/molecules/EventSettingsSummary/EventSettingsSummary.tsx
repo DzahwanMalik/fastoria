@@ -16,6 +16,10 @@ export default function EventSettingsSummary({
   onEditSection,
   className = "",
 }: EventSettingsSummaryProps): JSX.Element {
+  const { info } = values;
+  const prizePool =
+    info.prize_pool === "" ? EMPTY_TEXT : formatRupiah(Number(info.prize_pool));
+
   const editButton = (section: "contact" | "timeline" | "social_media") => (
     <Button
       variant="secondary"
@@ -32,10 +36,10 @@ export default function EventSettingsSummary({
       <Card shadow="sm" className="flex flex-col gap-3 p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex min-w-0 items-start gap-4">
-            {values.info.logo_url ? (
+            {info.logo_url ? (
               <img
-                src={values.info.logo_url}
-                alt={`Logo ${values.info.event_name}`}
+                src={info.logo_url}
+                alt={`Logo ${info.event_name}`}
                 className="h-16 w-16 shrink-0 border-[2.5px] border-black bg-surface-white object-contain"
               />
             ) : (
@@ -48,7 +52,7 @@ export default function EventSettingsSummary({
             )}
 
             <h2 className="font-headline-md text-headline-md uppercase tracking-tight">
-              {values.info.event_name}
+              {info.event_name || EMPTY_TEXT}
             </h2>
           </div>
 
@@ -64,21 +68,21 @@ export default function EventSettingsSummary({
 
         <div className="flex flex-wrap items-center gap-2">
           <Badge color="vivid-mint" size="sm" shadow="none">
-            {formatRupiah(Number(values.info.prize_pool) || 0)}
+            {prizePool}
           </Badge>
 
           <Badge color="electric-cyan" size="sm" shadow="none">
-            {values.info.venue_name}
+            {info.venue_name || EMPTY_TEXT}
           </Badge>
         </div>
 
         <p className="font-body-md text-body-md text-on-surface-variant">
-          {values.info.event_description}
+          {info.event_description || EMPTY_TEXT}
         </p>
 
         <p className="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant">
           <FiMapPin aria-hidden="true" size={14} />
-          {values.info.address}
+          {info.address || EMPTY_TEXT}
         </p>
       </Card>
 
