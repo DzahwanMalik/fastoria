@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import type { Tables } from "@/types/database";
 import { supabase } from "@/utils/supabase";
@@ -7,16 +7,18 @@ export interface CategoriesState {
   categories: Tables<"categories">[];
   isLoading: boolean;
   error: string | null;
+  refetch: () => void;
 }
 
 /**
- * Loads categories, used both to label competitions and to populate the
- * category select in the competition form.
+ * Loads categories, used to label competitions, to populate the category
+ * select in the competition form, and by the "Kategori" admin module.
  */
 export function useCategories(): CategoriesState {
   const [categories, setCategories] = useState<Tables<"categories">[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let isActive = true;
@@ -35,7 +37,7 @@ export function useCategories(): CategoriesState {
       }
 
       if (loadError) {
-        setError("Gagal memuat kategori.");
+        setError("Gagal memuat kategori. Coba lagi.");
         setIsLoading(false);
         return;
       }
@@ -49,7 +51,11 @@ export function useCategories(): CategoriesState {
     return () => {
       isActive = false;
     };
+  }, [reloadKey]);
+
+  const refetch = useCallback(() => {
+    setReloadKey((key) => key + 1);
   }, []);
 
-  return { categories, isLoading, error };
+  return { categories, isLoading, error, refetch };
 }

@@ -75,9 +75,9 @@ export const QUICK_ACTIONS: QuickActionConfig[] = [
   {
     id: "manage-categories",
     title: "Kelola Kategori",
-    description: "Atur cabang pada tabel categories.",
+    description: "Buka modul kategori pada tabel categories.",
     icon: FiTag,
-    disabled: true,
+    to: "/admin/kategori",
   },
   {
     id: "event-settings",

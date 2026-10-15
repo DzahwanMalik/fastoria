@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router";
 
 import AppToaster from "@/components/organisms/AppToaster";
 import AdminLayout from "@/layouts/AdminLayout";
+import AdminCategoryPage from "@/pages/AdminCategoryPage";
 import AdminCompetitionPage from "@/pages/AdminCompetitionPage";
 import AdminDashboardPage from "@/pages/AdminDashboardPage";
 import LandingPage from "@/pages/LandingPage";
@@ -25,6 +26,7 @@ createRoot(document.getElementById("root")!).render(
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="/admin/lomba" element={<AdminCompetitionPage />} />
+            <Route path="/admin/kategori" element={<AdminCategoryPage />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
