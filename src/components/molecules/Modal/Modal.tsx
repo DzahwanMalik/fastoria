@@ -66,7 +66,7 @@ export default function Modal({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/50">
+    <div className="fixed inset-0 z-100 overflow-y-auto bg-black/50">
       <div
         onClick={handleBackdropClick}
         className="flex min-h-full items-start justify-center p-4"
@@ -80,7 +80,7 @@ export default function Modal({
           tabIndex={-1}
           className={`my-auto w-full ${SIZE_MAP[size]} border-[3px] border-black bg-surface-white shadow-neo-lg outline-none ${className}`.trim()}
         >
-          <div className="flex items-start justify-between gap-4 border-b-[3px] border-black px-6 py-4">
+          <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b-[3px] border-black bg-surface-white px-6 py-4">
             <div className="min-w-0">
               <h2
                 id={titleId}

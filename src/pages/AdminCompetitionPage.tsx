@@ -69,8 +69,8 @@ export default function AdminCompetitionPage(): JSX.Element {
   const { competitions, isLoading, error, refetch } = useCompetitions();
   const { categories } = useCategories();
   const [categoryFilter, setCategoryFilter] = useState(ALL_CATEGORIES_FILTER);
-  const [isFormOpen, setIsFormOpen] = useState(
-    () => Boolean((location.state as CompetitionRouteState | null)?.create),
+  const [isFormOpen, setIsFormOpen] = useState(() =>
+    Boolean((location.state as CompetitionRouteState | null)?.create),
   );
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Competition | null>(null);
@@ -240,17 +240,10 @@ export default function AdminCompetitionPage(): JSX.Element {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
-          <Button variant="secondary" size="md" onClick={refetch}>
-            <FiRefreshCw aria-hidden="true" />
-            Muat ulang
-          </Button>
-
-          <Button variant="primary" size="md" onClick={openCreateForm}>
-            <FiPlus aria-hidden="true" />
-            Tambah Lomba
-          </Button>
-        </div>
+        <Button variant="primary" size="md" onClick={openCreateForm}>
+          <FiPlus aria-hidden="true" />
+          Tambah Lomba
+        </Button>
       </header>
 
       {!isLoading && !error && competitions.length > 0 && (
@@ -267,16 +260,12 @@ export default function AdminCompetitionPage(): JSX.Element {
               const isActive = option.value === categoryFilter;
 
               return (
-                <button
+                <Button
                   key={option.value}
-                  type="button"
+                  variant={isActive ? "lime" : "secondary"}
+                  size="sm"
                   aria-pressed={isActive}
                   onClick={() => setCategoryFilter(option.value)}
-                  className={`inline-flex items-center gap-2 border-[2.5px] border-black px-4 py-2 font-label-caps text-label-caps uppercase tracking-wider transition-all ${
-                    isActive
-                      ? "bg-primary-container shadow-neo-sm"
-                      : "bg-surface-white hover:bg-surface-container"
-                  }`}
                 >
                   {option.label}
                   <span
@@ -286,15 +275,15 @@ export default function AdminCompetitionPage(): JSX.Element {
                   >
                     {option.count}
                   </span>
-                </button>
+                </Button>
               );
             })}
           </div>
 
           {isFiltered && (
             <p className="mt-3 font-body-sm text-body-sm text-on-surface-variant">
-              Menampilkan {filteredCompetitions.length} dari {competitions.length}{" "}
-              lomba.
+              Menampilkan {filteredCompetitions.length} dari{" "}
+              {competitions.length} lomba.
             </p>
           )}
         </section>

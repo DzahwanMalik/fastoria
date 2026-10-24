@@ -23,4 +23,5 @@ export interface ButtonProps {
   rel?: string;
   ariaLabel?: string;
   "aria-label"?: string;
+  "aria-pressed"?: boolean;
 }

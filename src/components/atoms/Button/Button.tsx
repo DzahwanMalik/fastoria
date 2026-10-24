@@ -15,6 +15,7 @@ export default function Button({
   rel,
   ariaLabel,
   "aria-label": ariaLabelProp,
+  "aria-pressed": ariaPressed,
 }: ButtonProps): JSX.Element {
   const baseClasses =
     "inline-flex items-center justify-center gap-2 uppercase tracking-wider font-bold transition-all cursor-pointer select-none font-headline-sm";
@@ -61,6 +62,7 @@ export default function Button({
       disabled={disabled}
       aria-busy={disabled || undefined}
       aria-label={label}
+      aria-pressed={ariaPressed}
       className={combinedClasses}
     >
       {children}
