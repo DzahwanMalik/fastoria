@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 
+import defaultBanner from "@/assets/images/competitions/uiux-design.png";
 import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
@@ -30,6 +31,10 @@ export default function CompetitionCard({
             alt={competition.imageAlt}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             loading="lazy"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = defaultBanner;
+            }}
           />
         </div>
 
@@ -99,6 +104,9 @@ export default function CompetitionCard({
           variant="lime"
           size="md"
           className="flex-1"
+          href={competition.registrationLink}
+          target={competition.registrationLink ? "_blank" : undefined}
+          rel={competition.registrationLink ? "noopener noreferrer" : undefined}
           onClick={() => onRegisterClick?.(competition)}
         >
           Daftar Sekarang
@@ -108,6 +116,14 @@ export default function CompetitionCard({
           size="md"
           className="flex-1"
           href={competition.guidebookUrl ?? "#panduan"}
+          target={
+            competition.guidebookUrl?.startsWith("http") ? "_blank" : undefined
+          }
+          rel={
+            competition.guidebookUrl?.startsWith("http")
+              ? "noopener noreferrer"
+              : undefined
+          }
           onClick={() => onGuidebookClick?.(competition)}
         >
           Guidebook (PDF)

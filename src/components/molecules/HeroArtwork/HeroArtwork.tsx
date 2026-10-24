@@ -8,8 +8,10 @@ import { useParallaxTilt } from "@/hooks/useParallaxTilt";
 import type { HeroArtworkProps } from "./HeroArtwork.types";
 
 export default function HeroArtwork({
-  badgeLabel = "FASTORIA 2025 // OFFICIAL ARTWORK",
+  badgeLabel = "THE FASTORIA 2027 // OFFICIAL ARTWORK",
   imageSrc = image1,
+  altText = "The Fastoria 2027",
+  seasonBadge = "SEASON 04",
   className = "",
 }: HeroArtworkProps = {}): JSX.Element {
   const { cardRef, tilt, handleMouseMove, handleMouseLeave } =
@@ -76,7 +78,7 @@ export default function HeroArtwork({
           >
             <img
               src={imageSrc}
-              alt="Fastoria 2025"
+              alt={altText}
               className="w-full h-full object-cover block transition-transform duration-300 pointer-events-none"
               style={{
                 transform: tilt.isHovered ? "scale(1.06)" : "scale(1)",
@@ -93,7 +95,7 @@ export default function HeroArtwork({
                 transition: "transform 0.15s ease",
               }}
             >
-              SEASON 02
+              {seasonBadge}
             </Badge>
           </div>
 

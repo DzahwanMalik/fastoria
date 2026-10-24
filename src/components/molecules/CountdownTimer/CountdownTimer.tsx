@@ -14,8 +14,8 @@ const DEFAULT_COUNTDOWN_TARGET =
 
 export default function CountdownTimer({
   targetTimestamp = DEFAULT_COUNTDOWN_TARGET,
-  headerTitle = "Pendaftaran Gelombang 2 Berakhir Dalam:",
-  dDayLabel = "H-Day: 25 FEBRUARI 2025",
+  headerTitle = "Pendaftaran Ditutup Dalam:",
+  dDayLabel = "H-Day: 2 FEBRUARI 2027",
   className = "",
 }: CountdownTimerProps = {}): JSX.Element {
   const { timeLeft, formatNumber } = useCountdown(targetTimestamp);

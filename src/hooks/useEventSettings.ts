@@ -29,25 +29,41 @@ export function useEventSettings(): EventSettingsState {
       setIsLoading(true);
       setError(null);
 
-      const { data, error: loadError } = await supabase
-        .from("event_settings")
-        .select("*")
-        .order("created_at", { ascending: true })
-        .limit(1)
-        .maybeSingle();
+      try {
+        const { data, error: loadError } = await supabase
+          .from("event_settings")
+          .select("*")
+          .order("created_at", { ascending: true })
+          .limit(1)
+          .maybeSingle();
 
-      if (!isActive) {
-        return;
-      }
+        if (!isActive) {
+          return;
+        }
 
-      if (loadError) {
-        setError("Gagal memuat pengaturan event. Coba lagi.");
+        if (loadError) {
+          if (import.meta.env.DEV) {
+            console.error("useEventSettings loadError:", loadError);
+          }
+          setError("Gagal memuat pengaturan event dari server. Coba lagi.");
+          setIsLoading(false);
+          return;
+        }
+
+        setSettings(data);
         setIsLoading(false);
-        return;
+      } catch (err) {
+        if (!isActive) {
+          return;
+        }
+        if (import.meta.env.DEV) {
+          console.error("useEventSettings network error:", err);
+        }
+        setError(
+          "Koneksi ke server gagal. Periksa koneksi internet Anda lalu coba lagi.",
+        );
+        setIsLoading(false);
       }
-
-      setSettings(data);
-      setIsLoading(false);
     };
 
     void load();

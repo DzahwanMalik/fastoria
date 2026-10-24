@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import { useMemo } from "react";
 import { FiArrowRight, FiFileText } from "react-icons/fi";
 
 import Badge from "@/components/atoms/Badge";
@@ -6,10 +7,77 @@ import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
 import CountdownTimer from "@/components/molecules/CountdownTimer";
 import HeroArtwork from "@/components/molecules/HeroArtwork";
+import { formatRupiah } from "@/utils/currency";
+import { formatTimelineDate } from "@/utils/date";
+import { toEventSettingsValues } from "@/utils/eventSettings";
 
+import {
+  DEFAULT_HERO_DESCRIPTION,
+  DEFAULT_HERO_EVENT_NAME,
+  DEFAULT_HERO_PRIZE,
+  DEFAULT_HERO_REGISTRATION_BADGE,
+  DEFAULT_HERO_SUB_BADGE,
+} from "./Hero.constants";
 import type { HeroProps } from "./Hero.types";
 
-export default function Hero({ onRegisterClick }: HeroProps = {}): JSX.Element {
+export default function Hero({
+  settings,
+  onRegisterClick,
+  onGuidebookClick,
+}: HeroProps = {}): JSX.Element {
+  const values = useMemo(
+    () => (settings ? toEventSettingsValues(settings) : null),
+    [settings],
+  );
+
+  const eventName = settings?.event_name?.trim() || DEFAULT_HERO_EVENT_NAME;
+
+  const prizeFormatted = settings?.prize_pool
+    ? `${formatRupiah(settings.prize_pool)}!`
+    : DEFAULT_HERO_PRIZE;
+
+  const description =
+    settings?.event_description?.trim() || DEFAULT_HERO_DESCRIPTION;
+
+  const { registrationBadgeText, targetTimestamp, dDayLabel } = useMemo(() => {
+    const timeline = values?.timeline ?? [];
+
+    const registrationStep =
+      timeline.find((item) => /registra|daftar|pendaftaran/i.test(item.title)) ??
+      timeline[0];
+
+    const regBadge = registrationStep?.title
+      ? `${registrationStep.title} DIBUKA`
+      : DEFAULT_HERO_REGISTRATION_BADGE;
+
+    let target: number | undefined;
+    if (registrationStep?.end_date) {
+      const parsed = new Date(`${registrationStep.end_date}T23:59:59`).getTime();
+      if (!Number.isNaN(parsed)) {
+        target = parsed;
+      }
+    }
+
+    const eventDayStep =
+      timeline.find((item) =>
+        /event|pelaksanaan|h-day|hari h/i.test(item.title),
+      ) ?? timeline[timeline.length - 1];
+
+    let dDay: string | undefined;
+    if (eventDayStep?.start_date) {
+      const formatted = formatTimelineDate(eventDayStep.start_date);
+      if (formatted) {
+        dDay = `H-Day: ${formatted}`;
+      }
+    }
+
+    return {
+      registrationBadgeText: regBadge,
+      targetTimestamp: target,
+      dDayLabel: dDay,
+    };
+  }, [values]);
+
   return (
     <section
       id="hero"
@@ -25,10 +93,10 @@ export default function Hero({ onRegisterClick }: HeroProps = {}): JSX.Element {
         {/* Top Badges & Neo-Stickers Row */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <Badge color="electric-yellow" rotate="left" borderWidth="thick">
-            PENDAFTARAN GELOMBANG 2 DIBUKA
+            {registrationBadgeText}
           </Badge>
           <Badge color="soft-lilac" rotate="right" pulse>
-            KUOTA TERBATAS
+            {DEFAULT_HERO_SUB_BADGE}
           </Badge>
         </div>
 
@@ -47,19 +115,20 @@ export default function Hero({ onRegisterClick }: HeroProps = {}): JSX.Element {
                   shadow="sm"
                   className="mt-1"
                 >
-                  Rp 75.000.000!
+                  {prizeFormatted}
                 </Badge>
               </h1>
               <p className="font-body-lg text-base sm:text-lg text-on-surface-variant max-w-xl leading-relaxed">
-                Ajang kompetisi nasional desain antarmuka, rekayasa perangkat
-                lunak, dan inovasi bisnis untuk mahasiswa serta talenta muda
-                terbaik di seluruh Indonesia. Siapkan karyamu dan jadilah jawara
-                di arena!
+                {description}
               </p>
             </div>
 
-            {/* Countdown Timer Molecule (Self-contained timer logic) */}
-            <CountdownTimer />
+            {/* Countdown Timer Molecule */}
+            <CountdownTimer
+              targetTimestamp={targetTimestamp}
+              headerTitle="Pendaftaran Ditutup Dalam:"
+              dDayLabel={dDayLabel}
+            />
 
             {/* Action Buttons Row with Button Atoms */}
             <div className="flex flex-wrap items-center gap-4">
@@ -72,7 +141,12 @@ export default function Hero({ onRegisterClick }: HeroProps = {}): JSX.Element {
                 <span>Daftar Sekarang</span>
                 <FiArrowRight className="text-lg" />
               </Button>
-              <Button href="#panduan" variant="secondary" size="lg">
+              <Button
+                href="#panduan"
+                onClick={onGuidebookClick}
+                variant="secondary"
+                size="lg"
+              >
                 <FiFileText className="text-lg text-tertiary" />
                 <span>Unduh Rulebook (PDF)</span>
               </Button>
@@ -80,7 +154,11 @@ export default function Hero({ onRegisterClick }: HeroProps = {}): JSX.Element {
           </div>
 
           {/* Right Column: HeroArtwork Molecule (5 cols) */}
-          <HeroArtwork />
+          <HeroArtwork
+            badgeLabel={`${eventName} // OFFICIAL ARTWORK`}
+            altText={eventName}
+            seasonBadge="SEASON 04"
+          />
         </div>
       </Card>
     </section>

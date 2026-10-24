@@ -2,13 +2,18 @@ import type { JSX } from "react";
 
 import CompetitionSection from "@/components/organisms/CompetitionSection";
 import ContactSection from "@/components/organisms/ContactSection";
+import ErrorBoundary from "@/components/organisms/ErrorBoundary";
 import Hero from "@/components/organisms/Hero";
-import MarqueeTicker from "@/components/organisms/MarqueeTicker";
+import LandingError from "@/components/organisms/LandingError";
+import LandingLoading from "@/components/organisms/LandingLoading";
 import SponsorSection from "@/components/organisms/SponsorSection";
 import TimelineSection from "@/components/organisms/TimelineSection";
+import { useEventSettings } from "@/hooks/useEventSettings";
 import MainLayout from "@/layouts/MainLayout";
 
 export default function LandingPage(): JSX.Element {
+  const { settings, isLoading, error, refetch } = useEventSettings();
+
   const handleRegisterClick = () => {
     const section = document.getElementById("kategori");
     if (section) {
@@ -23,28 +28,49 @@ export default function LandingPage(): JSX.Element {
     }
   };
 
-  return (
-    <MainLayout onRegisterClick={handleRegisterClick}>
-      {/* Hero Section Organism */}
-      <Hero onRegisterClick={handleRegisterClick} />
+  // Pre-bootstrap state: Loading before landing page opens
+  if (isLoading) {
+    return <LandingLoading />;
+  }
 
-      {/* Infinite Marquee Announcement Organism */}
-      <MarqueeTicker />
-
-      {/* Competition Categories Section Organism */}
-      <CompetitionSection
-        onRegisterClick={handleRegisterClick}
-        onGuidebookClick={handleGuidebookClick}
+  // Pre-bootstrap state: Error handling before landing page opens
+  if (error || !settings) {
+    return (
+      <LandingError
+        message={
+          error ??
+          "Data konfigurasi event belum tersedia di database. Periksa database atau coba lagi."
+        }
+        onRetry={refetch}
       />
+    );
+  }
 
-      {/* Official Schedule & Timeline Organism */}
-      <TimelineSection />
+  return (
+    <ErrorBoundary>
+      <MainLayout settings={settings} onRegisterClick={handleRegisterClick}>
+        {/* Hero Section Organism with Supabase Data */}
+        <Hero
+          settings={settings}
+          onRegisterClick={handleRegisterClick}
+          onGuidebookClick={handleGuidebookClick}
+        />
 
-      {/* Contact Person & Quick FAQ Organism */}
-      <ContactSection />
+        {/* Competition Categories Section Organism */}
+        <CompetitionSection
+          onRegisterClick={handleRegisterClick}
+          onGuidebookClick={handleGuidebookClick}
+        />
 
-      {/* Partners & Sponsors Marquee Organism */}
-      <SponsorSection />
-    </MainLayout>
+        {/* Official Schedule & Timeline Organism */}
+        <TimelineSection />
+
+        {/* Contact Person & Quick FAQ Organism */}
+        <ContactSection />
+
+        {/* Partners & Sponsors Marquee Organism */}
+        <SponsorSection />
+      </MainLayout>
+    </ErrorBoundary>
   );
 }

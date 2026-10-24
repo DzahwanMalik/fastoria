@@ -5,7 +5,12 @@ import { FiArrowUpRight, FiMenu, FiX } from "react-icons/fi";
 import fastoriaLogo from "@/assets/images/LOGO PNG.png";
 import Button from "@/components/atoms/Button";
 
-export default function Navbar(): JSX.Element {
+import type { NavbarProps } from "./Navbar.types";
+
+export default function Navbar({
+  logoUrl,
+  eventName,
+}: NavbarProps = {}): JSX.Element {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
@@ -29,8 +34,8 @@ export default function Navbar(): JSX.Element {
           {/* Logo Frame Plate */}
           <div className="h-12 border-[2.5px] border-black px-2.5 py-1 shadow-neo-sm flex items-center justify-center group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 group-hover:shadow-neo-md active:translate-x-0.5 active:translate-y-0.5 active:shadow-neo-xs transition-all">
             <img
-              src={fastoriaLogo}
-              alt="Fastoria Logo"
+              src={logoUrl || fastoriaLogo}
+              alt={eventName || "Fastoria Logo"}
               className="h-full w-auto object-contain block"
             />
           </div>

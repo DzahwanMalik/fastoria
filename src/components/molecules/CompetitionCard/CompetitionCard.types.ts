@@ -1,8 +1,16 @@
-export type CompetitionCategory = "all" | "design" | "tech" | "business";
+export type CompetitionCategory = string;
+
+export interface CompetitionFilterTab {
+  id: string;
+  label: string;
+}
 
 export interface CompetitionItem {
   id: string;
-  category: "design" | "tech" | "business";
+  category?: string;
+  categoryId?: string | null;
+  categorySlug?: string;
+  categoryLabel?: string;
   title: string;
   description: string;
   imageSrc: string;
@@ -11,6 +19,7 @@ export interface CompetitionItem {
   fee: string;
   feeUnit: string;
   slotBadgeLabel?: string;
+  registrationLink?: string;
   guidebookUrl?: string;
 }
 
