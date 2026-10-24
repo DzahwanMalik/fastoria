@@ -157,17 +157,10 @@ export default function AdminCategoryPage(): JSX.Element {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
-          <Button variant="secondary" size="md" onClick={refetch}>
-            <FiRefreshCw aria-hidden="true" />
-            Muat ulang
-          </Button>
-
-          <Button variant="primary" size="md" onClick={openCreateForm}>
-            <FiPlus aria-hidden="true" />
-            Tambah Kategori
-          </Button>
-        </div>
+        <Button variant="primary" size="md" onClick={openCreateForm}>
+          <FiPlus aria-hidden="true" />
+          Tambah Kategori
+        </Button>
       </header>
 
       {isLoading && (

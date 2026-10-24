@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import EventSettingsFormActions from "./EventSettingsFormActions";
@@ -33,6 +33,8 @@ export default function SocialMediaForm({
     name: "social_media",
   });
 
+  const items = useWatch({ control, name: "social_media" });
+
   const submitForm = handleSubmit(async (values) => {
     await onSubmit(values);
   });
@@ -47,6 +49,7 @@ export default function SocialMediaForm({
         register={register}
         errors={errors.social_media}
         fields={fields}
+        platforms={items?.map((item) => item.platform)}
         disabled={isLoading}
         onAdd={() => append(SOCIAL_MEDIA_ITEM_DEFAULTS)}
         onRemove={remove}

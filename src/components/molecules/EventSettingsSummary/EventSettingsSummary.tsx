@@ -6,6 +6,7 @@ import Button from "@/components/atoms/Button";
 import Card from "@/components/atoms/Card";
 import { formatRupiah } from "@/utils/currency";
 import { formatTimelineDate } from "@/utils/date";
+import { getSocialMediaPlatformMeta } from "@/utils/socialMedia";
 
 import type { EventSettingsSummaryProps } from "./EventSettingsSummary.types";
 
@@ -130,19 +131,28 @@ export default function EventSettingsSummary({
             </p>
           ) : (
             <ul className="flex flex-col gap-3">
-              {values.social_media.map((item) => (
-                <li key={`${item.platform}-${item.url}`}>
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 font-body-sm text-body-sm underline underline-offset-4"
-                  >
-                    {item.label}
-                    <FiExternalLink aria-hidden="true" size={12} />
-                  </a>
-                </li>
-              ))}
+              {values.social_media.map((item) => {
+                const PlatformIcon = getSocialMediaPlatformMeta(
+                  item.platform,
+                )?.icon;
+
+                return (
+                  <li key={`${item.platform}-${item.url}`}>
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 font-body-sm text-body-sm underline underline-offset-4"
+                    >
+                      {PlatformIcon && (
+                        <PlatformIcon aria-hidden="true" size={14} />
+                      )}
+                      {item.label}
+                      <FiExternalLink aria-hidden="true" size={12} />
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           )}
         </Card>

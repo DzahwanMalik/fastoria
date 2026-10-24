@@ -57,4 +57,6 @@ export interface TimelineFieldsProps extends FieldListBaseProps {
 export interface SocialMediaFieldsProps extends FieldListBaseProps {
   register: UseFormRegister<SocialMediaListValues>;
   errors?: FieldErrors<SocialMediaListValues>["social_media"];
+  /** Row `platform` values, in field order, to pick the brand icon per row. */
+  platforms?: string[];
 }

@@ -6,6 +6,7 @@ import type {
 } from "@/components/molecules/EventSettingsForms";
 import type { Json, Tables, TablesInsert, TablesUpdate } from "@/types/database";
 import { isPhoneContactType, toInternationalPhone, toLocalPhone } from "@/utils/phone";
+import { toSocialMediaPlatform } from "@/utils/socialMedia";
 import { toStoredImageUrl } from "@/utils/storage";
 
 /** Normalized shape used by the summary view and the per-section modals. */
@@ -85,7 +86,7 @@ export const toEventSettingsValues = (
     return record
       ? [
           {
-            platform: asText(record.platform),
+            platform: toSocialMediaPlatform(asText(record.platform)),
             label: asText(record.label),
             url: asText(record.url),
           },

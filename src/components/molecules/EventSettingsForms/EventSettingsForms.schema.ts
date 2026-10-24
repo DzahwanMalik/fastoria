@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { isPhoneContactType, PHONE_LOCAL_PATTERN } from "@/utils/phone";
+import { SOCIAL_MEDIA_PLATFORMS } from "@/utils/socialMedia";
 
 /**
  * Numeric fields stay as strings in the form and are converted in the payload
@@ -32,7 +33,16 @@ export const timelineItemSchema = z.object({
 });
 
 export const socialMediaItemSchema = z.object({
-  platform: z.string().min(1, "Platform wajib diisi."),
+  // The union keeps the persisted value strict while still allowing a freshly
+  // added row to start blank; the refine rejects that blank on submit. The
+  // predicate avoids the `.trim()` type-narrowing so the output type still
+  // accepts `""` (the form's unselected state).
+  platform: z
+    .enum(SOCIAL_MEDIA_PLATFORMS)
+    .or(z.literal(""))
+    .refine((value) => value.trim().length > 0, {
+      message: "Platform wajib dipilih.",
+    }),
   label: z.string().min(1, "Label sosial media wajib diisi."),
   url: z.string().min(1, "URL wajib diisi.").url("Format URL tidak valid."),
 });
