@@ -1,8 +1,8 @@
 import type { ContactCardItem } from "@/components/molecules/ContactCard";
-import type { FaqItem } from "@/components/molecules/FaqAccordion";
+import type { Tables } from "@/types/database";
 
 export interface ContactSectionProps {
+  settings?: Tables<"event_settings"> | null;
   contacts?: ContactCardItem[];
-  faqs?: FaqItem[];
   className?: string;
 }

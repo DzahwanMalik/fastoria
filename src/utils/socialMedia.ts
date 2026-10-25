@@ -41,18 +41,26 @@ export const SOCIAL_MEDIA_PLATFORM_META: Record<
 export function isSocialMediaPlatform(
   value: string,
 ): value is SocialMediaPlatform {
-  return (SOCIAL_MEDIA_PLATFORMS as readonly string[]).includes(value);
+  return (SOCIAL_MEDIA_PLATFORMS as readonly string[]).includes(
+    value.trim().toLowerCase(),
+  );
 }
 
 export function getSocialMediaPlatformMeta(
   value: string,
 ): SocialMediaPlatformMeta | null {
-  return isSocialMediaPlatform(value) ? SOCIAL_MEDIA_PLATFORM_META[value] : null;
+  const normalized = value.trim().toLowerCase();
+  return (SOCIAL_MEDIA_PLATFORMS as readonly string[]).includes(normalized)
+    ? SOCIAL_MEDIA_PLATFORM_META[normalized as SocialMediaPlatform]
+    : null;
 }
 
 /** Narrows a stored (untrusted) platform, degrading unknown values to blank. */
 export function toSocialMediaPlatform(
   value: string,
 ): SocialMediaPlatform | "" {
-  return isSocialMediaPlatform(value) ? value : "";
+  const normalized = value.trim().toLowerCase();
+  return (SOCIAL_MEDIA_PLATFORMS as readonly string[]).includes(normalized)
+    ? (normalized as SocialMediaPlatform)
+    : "";
 }

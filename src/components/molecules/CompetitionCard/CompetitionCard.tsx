@@ -68,7 +68,7 @@ export default function CompetitionCard({
             bgColor="container"
             borderWidth="thin"
             shadow="sm"
-            className="p-4 mb-6 flex items-center justify-between"
+            className="p-4 mb-6 flex flex-col sm:flex-row gap-3 sm:items-center justify-between"
           >
             <div>
               <span className="font-label-caps text-label-caps text-on-surface-variant block font-bold">
@@ -88,6 +88,7 @@ export default function CompetitionCard({
                 shadow="xs"
                 size="sm"
                 borderWidth="normal"
+                className="w-fit"
               >
                 {competition.slotBadgeLabel}
               </Badge>

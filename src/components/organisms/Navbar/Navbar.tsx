@@ -16,9 +16,7 @@ export default function Navbar({
   const navLinks = [
     { label: "Beranda", href: "#hero" },
     { label: "Kategori Lomba", href: "#kategori" },
-    { label: "Alur Pendaftaran", href: "#alur" },
-    { label: "Hadiah & Benefit", href: "#hadiah" },
-    { label: "FAQ", href: "#faq" },
+    { label: "Jadwal & Agenda", href: "#timeline" },
     { label: "Kontak", href: "#kontak" },
   ];
 

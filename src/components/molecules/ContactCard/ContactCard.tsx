@@ -37,7 +37,11 @@ export default function ContactCard({
 
         {/* Contact Value (Phone Number / Email Address) */}
         <span className="font-label-md text-label-md block font-bold text-on-surface mb-4">
-          {contact.contactValue}
+          {contact.contactValue.startsWith("+62")
+            ? contact.contactValue
+            : contact.contactValue.includes("@")
+              ? contact.contactValue
+              : `+62${contact.contactValue.replace(/^0+/, "")}`}
         </span>
       </div>
 

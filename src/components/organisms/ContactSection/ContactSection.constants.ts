@@ -1,5 +1,4 @@
 import type { ContactCardItem } from "@/components/molecules/ContactCard";
-import type { FaqItem } from "@/components/molecules/FaqAccordion";
 
 export const DEFAULT_CONTACTS: ContactCardItem[] = [
   {
@@ -34,27 +33,5 @@ export const DEFAULT_CONTACTS: ContactCardItem[] = [
     actionLabel: "Kirim Email Resmi",
     actionHref: "mailto:halo@arenafest.id",
     actionVariant: "email",
-  },
-];
-
-export const DEFAULT_FAQS: FaqItem[] = [
-  {
-    id: "faq-1",
-    question:
-      "Apakah anggota tim boleh berasal dari kampus atau instansi yang berbeda?",
-    answer:
-      "Ya, diperbolehkan! Anggota tim dapat berasal dari institusi pendidikan atau organisasi yang berbeda, asalkan memenuhi batasan usia 17–25 tahun.",
-  },
-  {
-    id: "faq-2",
-    question: "Apakah peserta boleh mendaftar lebih dari satu kategori lomba?",
-    answer:
-      "Boleh, peserta diperkenankan mengikuti maksimal 2 cabang kompetisi dengan catatan jadwal finalis dan pengumpulan karya dipenuhi masing-masing.",
-  },
-  {
-    id: "faq-3",
-    question: "Bagaimana mekanisme pelaksanaan babak Grand Final?",
-    answer:
-      "Babak final diselenggarakan secara hybrid. 5 finalis terpilih dapat hadir langsung di panggung luring (Jakarta) atau melalui live streaming terverifikasi.",
   },
 ];

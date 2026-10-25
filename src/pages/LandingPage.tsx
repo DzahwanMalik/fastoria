@@ -5,7 +5,6 @@ import ContactSection from "@/components/organisms/ContactSection";
 import Hero from "@/components/organisms/Hero";
 import LandingError from "@/components/organisms/LandingError";
 import LandingLoading from "@/components/organisms/LandingLoading";
-import SponsorSection from "@/components/organisms/SponsorSection";
 import TimelineSection from "@/components/organisms/TimelineSection";
 import { useEventSettings } from "@/hooks/useEventSettings";
 import { useLandingCompetitions } from "@/hooks/useLandingCompetitions";
@@ -67,11 +66,8 @@ export default function LandingPage(): JSX.Element {
       {/* Official Schedule & Timeline Organism */}
       <TimelineSection settings={settings} />
 
-      {/* Contact Person & Quick FAQ Organism */}
-      <ContactSection />
-
-      {/* Partners & Sponsors Marquee Organism */}
-      <SponsorSection />
+      {/* Contact Person Organism with Supabase Data */}
+      <ContactSection settings={settings} />
     </MainLayout>
   );
 }

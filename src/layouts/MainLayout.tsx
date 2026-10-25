@@ -29,7 +29,7 @@ export default function MainLayout({
       </main>
 
       {/* Global Footer Organism */}
-      {showFooter && <Footer />}
+      {showFooter && <Footer settings={settings} />}
     </div>
   );
 }
