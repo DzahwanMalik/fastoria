@@ -18,14 +18,12 @@ export default function CompetitionSection({
   categories = CATEGORY_TABS,
   className = "",
 }: CompetitionSectionProps = {}): JSX.Element {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const resolvedCategories =
     categories.length > 0 ? categories : CATEGORY_TABS;
 
-  const activeCategory =
-    selectedCategory ??
-    (resolvedCategories.length > 1 ? resolvedCategories[1].id : "all");
+  const activeCategory = selectedCategory;
 
   const filteredCompetitions = useMemo(() => {
     if (activeCategory === "all") {
