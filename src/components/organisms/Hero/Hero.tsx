@@ -18,9 +18,7 @@ import {
 } from "./Hero.constants";
 import type { HeroProps } from "./Hero.types";
 
-export default function Hero({
-  settings,
-}: HeroProps = {}): JSX.Element {
+export default function Hero({ settings }: HeroProps = {}): JSX.Element {
   const values = useMemo(
     () => (settings ? toEventSettingsValues(settings) : null),
     [settings],
@@ -85,16 +83,15 @@ export default function Hero({
         className="relative p-6 md:p-12 overflow-hidden"
       >
         <div className="mb-4">
-
-        <Badge color="electric-yellow" rotate="left" borderWidth="thick">
-          {eventName}
-        </Badge>
+          <Badge color="electric-yellow" rotate="left" borderWidth="thick">
+            {eventName}
+          </Badge>
         </div>
 
         {/* 2-Column Hero Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Headlines, Countdown & CTAs (7 cols) */}
-          <div className="lg:col-span-7 flex flex-col justify-center">
+          <div className="order-2 lg:order-1 lg:col-span-7 flex flex-col justify-center">
             <div className="space-y-4 mb-8">
               <h1 className="font-headline-xl text-3xl sm:text-4xl md:text-[50px] md:leading-14 text-on-surface tracking-tight uppercase font-extrabold">
                 Tunjukkan Bakat, Rebut Total Hadiah{" "}
@@ -122,18 +119,14 @@ export default function Hero({
             />
 
             {/* Action Buttons Row with Button Atoms */}
-            <Button
-              href="#kategori"
-              variant="primary"
-              size="lg"
-            >
+            <Button href="#kategori" variant="primary" size="lg">
               <span>Daftar Sekarang</span>
               <FiArrowRight className="text-lg" />
             </Button>
           </div>
 
           {/* Right Column: HeroArtwork Molecule (5 cols) */}
-          <HeroArtwork />
+          <HeroArtwork className="order-1 lg:order-2" />
         </div>
       </Card>
     </section>
