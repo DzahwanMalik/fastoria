@@ -25,7 +25,12 @@ export default function LandingError({
         className="max-w-lg w-full p-6 sm:p-10 text-center relative overflow-hidden"
       >
         <div className="flex justify-center mb-6">
-          <Badge color="punch-coral" rotate="left" borderWidth="thick" shadow="sm">
+          <Badge
+            color="punch-coral"
+            rotate="left"
+            borderWidth="thick"
+            shadow="sm"
+          >
             GAGAL MEMUAT DATA
           </Badge>
         </div>
@@ -33,7 +38,11 @@ export default function LandingError({
         {/* Warning Icon Badge Container */}
         <div className="flex justify-center mb-6">
           <div className="w-16 h-16 border-[3px] border-black bg-punch-coral shadow-neo-sm flex items-center justify-center -rotate-2">
-            <FiAlertTriangle size={34} className="text-black" aria-hidden="true" />
+            <FiAlertTriangle
+              size={34}
+              className="text-black"
+              aria-hidden="true"
+            />
           </div>
         </div>
 
@@ -46,22 +55,12 @@ export default function LandingError({
         </p>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
-          {onRetry && (
-            <Button variant="primary" size="lg" onClick={onRetry}>
-              <FiRefreshCw className="text-lg" aria-hidden="true" />
-              <span>Coba Lagi</span>
-            </Button>
-          )}
-
-          <Button
-            variant="secondary"
-            size="lg"
-            onClick={() => window.location.reload()}
-          >
-            <span>Muat Ulang Halaman</span>
+        {onRetry && (
+          <Button variant="primary" size="lg" onClick={onRetry}>
+            <FiRefreshCw className="text-lg" aria-hidden="true" />
+            <span>Coba Lagi</span>
           </Button>
-        </div>
+        )}
 
         <p className="mt-8 font-label-caps text-[11px] text-on-surface-variant uppercase tracking-wider">
           FAST &bull; ART &bull; SPORT // FASTORIA 2027

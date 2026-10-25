@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 import { useMemo } from "react";
-import { FiArrowRight, FiFileText } from "react-icons/fi";
+import { FiArrowRight } from "react-icons/fi";
 
 import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
@@ -15,22 +15,18 @@ import {
   DEFAULT_HERO_DESCRIPTION,
   DEFAULT_HERO_EVENT_NAME,
   DEFAULT_HERO_PRIZE,
-  DEFAULT_HERO_REGISTRATION_BADGE,
-  DEFAULT_HERO_SUB_BADGE,
 } from "./Hero.constants";
 import type { HeroProps } from "./Hero.types";
 
 export default function Hero({
   settings,
-  onRegisterClick,
-  onGuidebookClick,
 }: HeroProps = {}): JSX.Element {
   const values = useMemo(
     () => (settings ? toEventSettingsValues(settings) : null),
     [settings],
   );
 
-  const eventName = settings?.event_name?.trim() || DEFAULT_HERO_EVENT_NAME;
+  const eventName = settings?.event_name || DEFAULT_HERO_EVENT_NAME;
 
   const prizeFormatted = settings?.prize_pool
     ? `${formatRupiah(settings.prize_pool)}!`
@@ -39,20 +35,19 @@ export default function Hero({
   const description =
     settings?.event_description?.trim() || DEFAULT_HERO_DESCRIPTION;
 
-  const { registrationBadgeText, targetTimestamp, dDayLabel } = useMemo(() => {
+  const { targetTimestamp, dDayLabel } = useMemo(() => {
     const timeline = values?.timeline ?? [];
 
     const registrationStep =
-      timeline.find((item) => /registra|daftar|pendaftaran/i.test(item.title)) ??
-      timeline[0];
-
-    const regBadge = registrationStep?.title
-      ? `${registrationStep.title} DIBUKA`
-      : DEFAULT_HERO_REGISTRATION_BADGE;
+      timeline.find((item) =>
+        /registra|daftar|pendaftaran/i.test(item.title),
+      ) ?? timeline[0];
 
     let target: number | undefined;
     if (registrationStep?.end_date) {
-      const parsed = new Date(`${registrationStep.end_date}T23:59:59`).getTime();
+      const parsed = new Date(
+        `${registrationStep.end_date}T23:59:59`,
+      ).getTime();
       if (!Number.isNaN(parsed)) {
         target = parsed;
       }
@@ -72,7 +67,6 @@ export default function Hero({
     }
 
     return {
-      registrationBadgeText: regBadge,
       targetTimestamp: target,
       dDayLabel: dDay,
     };
@@ -90,14 +84,11 @@ export default function Hero({
         borderWidth="thick"
         className="relative p-6 md:p-12 overflow-hidden"
       >
-        {/* Top Badges & Neo-Stickers Row */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <Badge color="electric-yellow" rotate="left" borderWidth="thick">
-            {registrationBadgeText}
-          </Badge>
-          <Badge color="soft-lilac" rotate="right" pulse>
-            {DEFAULT_HERO_SUB_BADGE}
-          </Badge>
+        <div className="mb-4">
+
+        <Badge color="electric-yellow" rotate="left" borderWidth="thick">
+          {eventName}
+        </Badge>
         </div>
 
         {/* 2-Column Hero Grid Layout */}
@@ -131,34 +122,18 @@ export default function Hero({
             />
 
             {/* Action Buttons Row with Button Atoms */}
-            <div className="flex flex-wrap items-center gap-4">
-              <Button
-                href="#kategori"
-                onClick={onRegisterClick}
-                variant="primary"
-                size="lg"
-              >
-                <span>Daftar Sekarang</span>
-                <FiArrowRight className="text-lg" />
-              </Button>
-              <Button
-                href="#panduan"
-                onClick={onGuidebookClick}
-                variant="secondary"
-                size="lg"
-              >
-                <FiFileText className="text-lg text-tertiary" />
-                <span>Unduh Rulebook (PDF)</span>
-              </Button>
-            </div>
+            <Button
+              href="#kategori"
+              variant="primary"
+              size="lg"
+            >
+              <span>Daftar Sekarang</span>
+              <FiArrowRight className="text-lg" />
+            </Button>
           </div>
 
           {/* Right Column: HeroArtwork Molecule (5 cols) */}
-          <HeroArtwork
-            badgeLabel={`${eventName} // OFFICIAL ARTWORK`}
-            altText={eventName}
-            seasonBadge="SEASON 04"
-          />
+          <HeroArtwork />
         </div>
       </Card>
     </section>

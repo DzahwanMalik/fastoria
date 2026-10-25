@@ -8,10 +8,8 @@ import { useParallaxTilt } from "@/hooks/useParallaxTilt";
 import type { HeroArtworkProps } from "./HeroArtwork.types";
 
 export default function HeroArtwork({
-  badgeLabel = "THE FASTORIA 2027 // OFFICIAL ARTWORK",
   imageSrc = image1,
   altText = "The Fastoria 2027",
-  seasonBadge = "SEASON 04",
   className = "",
 }: HeroArtworkProps = {}): JSX.Element {
   const { cardRef, tilt, handleMouseMove, handleMouseLeave } =
@@ -22,21 +20,6 @@ export default function HeroArtwork({
       className={`lg:col-span-5 relative flex flex-col items-center justify-center mt-4 lg:mt-0 ${className}`.trim()}
     >
       <div className="w-full relative" style={{ perspective: "1200px" }}>
-        {/* Top Floating Badge Atom */}
-        <Badge
-          color="punch-coral"
-          shadow="sm"
-          className="absolute -top-3.5 left-4 z-30 pointer-events-none select-none -rotate-2"
-          style={{
-            transform: `translate3d(${tilt.rotateY * 0.5}px, ${-tilt.rotateX * 0.5}px, 40px) rotate(-2deg)`,
-            transition: tilt.isHovered
-              ? "transform 0.08s ease-out"
-              : "transform 0.5s ease-out",
-          }}
-        >
-          {badgeLabel}
-        </Badge>
-
         {/* 3D Parallax Main Tilt Card Atom */}
         <Card
           ref={cardRef}
@@ -70,7 +53,7 @@ export default function HeroArtwork({
           )}
 
           <div
-            className="w-full overflow-hidden relative aspect-4/3 bg-surface-container"
+            className="w-full overflow-hidden aspect-4/3 bg-surface-container"
             style={{
               transform: "translateZ(18px)",
               transformStyle: "preserve-3d",
@@ -84,33 +67,14 @@ export default function HeroArtwork({
                 transform: tilt.isHovered ? "scale(1.06)" : "scale(1)",
               }}
             />
-
-            {/* Corner Badge Atom */}
-            <Badge
-              color="secondary"
-              shadow="xs"
-              className="absolute bottom-3 right-3 z-10 rotate-3 font-black"
-              style={{
-                transform: "translateZ(30px) rotate(3deg)",
-                transition: "transform 0.15s ease",
-              }}
-            >
-              {seasonBadge}
-            </Badge>
           </div>
 
           <div
-            className="p-3.5 bg-surface-white border-t-[2.5px] border-black flex items-center justify-between gap-2"
+            className="p-3.5 bg-surface-white border-t-[2.5px] border-black flex items-center justify-end gap-2"
             style={{
               transform: "translateZ(12px)",
             }}
           >
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 bg-primary-container border border-black inline-block animate-pulse" />
-              <span className="font-label-caps text-[11px] sm:text-xs uppercase font-extrabold tracking-wider text-on-surface">
-                TECH & CREATIVE ARENA
-              </span>
-            </div>
             {/* Action Mini Badge Atom */}
             <Badge
               color="electric-yellow"

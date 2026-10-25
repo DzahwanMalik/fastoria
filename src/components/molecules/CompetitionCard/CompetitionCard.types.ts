@@ -25,7 +25,6 @@ export interface CompetitionItem {
 
 export interface CompetitionCardProps {
   competition: CompetitionItem;
-  onRegisterClick?: (competition: CompetitionItem) => void;
-  onGuidebookClick?: (competition: CompetitionItem) => void;
   className?: string;
 }
+

@@ -9,8 +9,6 @@ import type { CompetitionCardProps } from "./CompetitionCard.types";
 
 export default function CompetitionCard({
   competition,
-  onRegisterClick,
-  onGuidebookClick,
   className = "",
 }: CompetitionCardProps): JSX.Element {
   return (
@@ -107,7 +105,6 @@ export default function CompetitionCard({
           href={competition.registrationLink}
           target={competition.registrationLink ? "_blank" : undefined}
           rel={competition.registrationLink ? "noopener noreferrer" : undefined}
-          onClick={() => onRegisterClick?.(competition)}
         >
           Daftar Sekarang
         </Button>
@@ -115,7 +112,7 @@ export default function CompetitionCard({
           variant="secondary"
           size="md"
           className="flex-1"
-          href={competition.guidebookUrl ?? "#panduan"}
+          href={competition.guidebookUrl}
           target={
             competition.guidebookUrl?.startsWith("http") ? "_blank" : undefined
           }
@@ -124,7 +121,6 @@ export default function CompetitionCard({
               ? "noopener noreferrer"
               : undefined
           }
-          onClick={() => onGuidebookClick?.(competition)}
         >
           Guidebook (PDF)
         </Button>

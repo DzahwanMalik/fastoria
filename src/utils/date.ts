@@ -14,6 +14,33 @@ const ID_MONTHS = [
 ];
 
 /**
+ * Parses a Date or string safely into calendar year, month, and day.
+ * When given a pure YYYY-MM-DD string, extracts parts directly to avoid UTC-offset timezone shifts.
+ */
+function parseDateParts(
+  value?: string | Date
+): { day: number; month: number; year: number } | null {
+  if (!value) return null;
+  if (typeof value === "string") {
+    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(value.trim());
+    if (match) {
+      return {
+        year: parseInt(match[1], 10),
+        month: parseInt(match[2], 10) - 1,
+        day: parseInt(match[3], 10),
+      };
+    }
+  }
+  const d = typeof value === "string" ? new Date(value) : value;
+  if (Number.isNaN(d.getTime())) return null;
+  return {
+    year: d.getFullYear(),
+    month: d.getMonth(),
+    day: d.getDate(),
+  };
+}
+
+/**
  * Formats a startDate and optional endDate timestamptz into standard uppercase Indonesian date strings.
  * Supports both single dates ("5 OKTOBER 2026") and ranges ("1 - 30 SEPTEMBER 2026").
  */
@@ -21,31 +48,27 @@ export function formatTimelineDate(
   startDateStr?: string | Date,
   endDateStr?: string | Date
 ): string {
-  if (!startDateStr) {
+  const startParts = parseDateParts(startDateStr);
+  if (!startParts) {
     return "";
   }
 
-  const start = new Date(startDateStr);
-  if (Number.isNaN(start.getTime())) {
-    return "";
-  }
-
-  const startDay = start.getDate();
-  const startMonth = ID_MONTHS[start.getMonth()];
-  const startYear = start.getFullYear();
+  const startDay = startParts.day;
+  const startMonth = ID_MONTHS[startParts.month];
+  const startYear = startParts.year;
 
   if (!endDateStr) {
     return `${startDay} ${startMonth} ${startYear}`;
   }
 
-  const end = new Date(endDateStr);
-  if (Number.isNaN(end.getTime())) {
+  const endParts = parseDateParts(endDateStr);
+  if (!endParts) {
     return `${startDay} ${startMonth} ${startYear}`;
   }
 
-  const endDay = end.getDate();
-  const endMonth = ID_MONTHS[end.getMonth()];
-  const endYear = end.getFullYear();
+  const endDay = endParts.day;
+  const endMonth = ID_MONTHS[endParts.month];
+  const endYear = endParts.year;
 
   // Same single day
   if (

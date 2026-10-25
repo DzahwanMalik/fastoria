@@ -2,30 +2,37 @@ import type { JSX } from "react";
 
 import CompetitionSection from "@/components/organisms/CompetitionSection";
 import ContactSection from "@/components/organisms/ContactSection";
-import ErrorBoundary from "@/components/organisms/ErrorBoundary";
 import Hero from "@/components/organisms/Hero";
 import LandingError from "@/components/organisms/LandingError";
 import LandingLoading from "@/components/organisms/LandingLoading";
 import SponsorSection from "@/components/organisms/SponsorSection";
 import TimelineSection from "@/components/organisms/TimelineSection";
 import { useEventSettings } from "@/hooks/useEventSettings";
+import { useLandingCompetitions } from "@/hooks/useLandingCompetitions";
 import MainLayout from "@/layouts/MainLayout";
 
 export default function LandingPage(): JSX.Element {
-  const { settings, isLoading, error, refetch } = useEventSettings();
+  const {
+    settings,
+    isLoading: isSettingsLoading,
+    error: settingsError,
+    refetch: refetchSettings,
+  } = useEventSettings();
 
-  const handleRegisterClick = () => {
-    const section = document.getElementById("kategori");
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+  const {
+    competitions,
+    categories,
+    isLoading: isCompetitionsLoading,
+    error: competitionsError,
+    refetch: refetchCompetitions,
+  } = useLandingCompetitions();
 
-  const handleGuidebookClick = () => {
-    const section = document.getElementById("panduan");
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-    }
+  const isLoading = isSettingsLoading || isCompetitionsLoading;
+  const error = settingsError || competitionsError;
+
+  const handleRetry = () => {
+    if (settingsError) refetchSettings();
+    if (competitionsError) refetchCompetitions();
   };
 
   // Pre-bootstrap state: Loading before landing page opens
@@ -41,36 +48,30 @@ export default function LandingPage(): JSX.Element {
           error ??
           "Data konfigurasi event belum tersedia di database. Periksa database atau coba lagi."
         }
-        onRetry={refetch}
+        onRetry={handleRetry}
       />
     );
   }
 
   return (
-    <ErrorBoundary>
-      <MainLayout settings={settings} onRegisterClick={handleRegisterClick}>
-        {/* Hero Section Organism with Supabase Data */}
-        <Hero
-          settings={settings}
-          onRegisterClick={handleRegisterClick}
-          onGuidebookClick={handleGuidebookClick}
-        />
+    <MainLayout settings={settings}>
+      {/* Hero Section Organism with Supabase Data */}
+      <Hero settings={settings} />
 
-        {/* Competition Categories Section Organism */}
-        <CompetitionSection
-          onRegisterClick={handleRegisterClick}
-          onGuidebookClick={handleGuidebookClick}
-        />
+      {/* Competition Categories Section Organism */}
+      <CompetitionSection
+        competitions={competitions}
+        categories={categories}
+      />
 
-        {/* Official Schedule & Timeline Organism */}
-        <TimelineSection />
+      {/* Official Schedule & Timeline Organism */}
+      <TimelineSection settings={settings} />
 
-        {/* Contact Person & Quick FAQ Organism */}
-        <ContactSection />
+      {/* Contact Person & Quick FAQ Organism */}
+      <ContactSection />
 
-        {/* Partners & Sponsors Marquee Organism */}
-        <SponsorSection />
-      </MainLayout>
-    </ErrorBoundary>
+      {/* Partners & Sponsors Marquee Organism */}
+      <SponsorSection />
+    </MainLayout>
   );
 }

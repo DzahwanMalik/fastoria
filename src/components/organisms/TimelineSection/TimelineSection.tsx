@@ -2,25 +2,52 @@ import type { JSX } from "react";
 import { useMemo } from "react";
 
 import Badge from "@/components/atoms/Badge";
-import RulebookBanner from "@/components/molecules/RulebookBanner";
 import type { TimelineStepItem } from "@/components/molecules/TimelineStepCard";
 import TimelineStepCard, {
   isTimelineStepActive,
 } from "@/components/molecules/TimelineStepCard";
+import { toEventSettingsValues } from "@/utils/eventSettings";
 
 import { DEFAULT_TIMELINE_STEPS } from "./TimelineSection.constants";
 import type { TimelineSectionProps } from "./TimelineSection.types";
 
 export default function TimelineSection({
-  steps = DEFAULT_TIMELINE_STEPS,
+  settings,
+  steps: propSteps,
   currentDate,
-  onRulebookDownload,
   className = "",
-}: TimelineSectionProps): JSX.Element {
-  const referenceDate = useMemo(() => {
-    if (!currentDate) return new Date();
-    return typeof currentDate === "string" ? new Date(currentDate) : currentDate;
-  }, [currentDate]);
+}: TimelineSectionProps = {}): JSX.Element {
+  const referenceDate = useMemo(() => currentDate ?? new Date(), [currentDate]);
+
+  const effectiveSteps: TimelineStepItem[] = useMemo(() => {
+    if (propSteps) {
+      return propSteps;
+    }
+
+    if (settings) {
+      const values = toEventSettingsValues(settings);
+      if (values.timeline.length > 0) {
+        return values.timeline.map((item, index) => ({
+          stepNumber: Number(item.step) || index + 1,
+          title: item.title,
+          description: item.description,
+          startDate: item.start_date,
+          endDate: item.end_date || undefined,
+        }));
+      }
+    }
+
+    return DEFAULT_TIMELINE_STEPS;
+  }, [propSteps, settings]);
+
+  const gridColsClass = useMemo(() => {
+    const count = effectiveSteps.length;
+    if (count <= 1) return "grid-cols-1";
+    if (count === 2) return "grid-cols-1 sm:grid-cols-2";
+    if (count === 3) return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3";
+    if (count === 4) return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4";
+    return "grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5";
+  }, [effectiveSteps.length]);
 
   return (
     <section
@@ -45,13 +72,13 @@ export default function TimelineSection({
 
           <p className="font-body-md text-body-md text-on-surface-variant mt-2">
             Catat setiap milestone penting agar tim kamu tidak melewatkan tenggat
-            pengumpulan berkas dan penjurian.
+            pendaftaran, technical meeting, dan hari perlombaan.
           </p>
         </div>
 
-        {/* 5-Step Horizontal/Responsive Stepper Grid with Conditional Active State */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-          {steps.map((step: TimelineStepItem) => {
+        {/* Stepper Grid with Dynamic Responsive Columns & Active State */}
+        <div className={`grid ${gridColsClass} gap-6`}>
+          {effectiveSteps.map((step: TimelineStepItem) => {
             const isActive = isTimelineStepActive(step, referenceDate);
             return (
               <TimelineStepCard
@@ -62,9 +89,6 @@ export default function TimelineSection({
             );
           })}
         </div>
-
-        {/* Rulebook Download Banner */}
-        <RulebookBanner onDownloadClick={onRulebookDownload} />
       </div>
     </section>
   );

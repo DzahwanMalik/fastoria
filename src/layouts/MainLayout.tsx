@@ -8,14 +8,12 @@ export interface MainLayoutProps {
   children: ReactNode;
   showFooter?: boolean;
   settings?: Tables<"event_settings"> | null;
-  onRegisterClick?: () => void;
 }
 
 export default function MainLayout({
   children,
   showFooter = true,
   settings,
-  onRegisterClick,
 }: MainLayoutProps): JSX.Element {
   return (
     <div className="min-h-screen bg-canvas-bg text-on-surface antialiased selection:bg-primary-container selection:text-on-surface flex flex-col justify-between">
@@ -23,7 +21,6 @@ export default function MainLayout({
       <Navbar
         logoUrl={settings?.logo_url}
         eventName={settings?.event_name}
-        onRegisterClick={onRegisterClick}
       />
 
       {/* Main Content Area */}
