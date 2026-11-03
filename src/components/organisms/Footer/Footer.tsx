@@ -267,7 +267,7 @@ export default function Footer({
               THE.FASTORIA
             </span>
             <span className="font-label-md text-xs sm:text-sm text-on-surface-variant font-bold tracking-wider">
-              // NATIONAL CREATIVE &amp; TECH COMP
+              // Art & Sport Real Action
             </span>
           </div>
 
