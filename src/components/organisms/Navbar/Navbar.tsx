@@ -2,16 +2,20 @@ import type { JSX } from "react";
 import { useState } from "react";
 import { FiArrowUpRight, FiMenu, FiX } from "react-icons/fi";
 
-import fastoriaLogo from "@/assets/images/LOGO PNG.png";
 import Button from "@/components/atoms/Button";
+import { useEventSettings } from "@/hooks/useEventSettings";
 
 import type { NavbarProps } from "./Navbar.types";
 
 export default function Navbar({
-  logoUrl,
-  eventName,
+  logoUrl: propLogoUrl,
+  eventName: propEventName,
 }: NavbarProps = {}): JSX.Element {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { settings } = useEventSettings();
+
+  const logoUrl = propLogoUrl !== undefined ? propLogoUrl : settings?.logo_url;
+  const eventName = propEventName || settings?.event_name || "Fastoria Logo";
 
   const navLinks = [
     { label: "Beranda", href: "#hero" },
@@ -31,11 +35,17 @@ export default function Navbar({
         >
           {/* Logo Frame Plate */}
           <div className="h-12 border-[2.5px] border-black px-2.5 py-1 shadow-neo-sm flex items-center justify-center group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 group-hover:shadow-neo-md active:translate-x-0.5 active:translate-y-0.5 active:shadow-neo-xs transition-all">
-            <img
-              src={logoUrl || fastoriaLogo}
-              alt={eventName || "Fastoria Logo"}
-              className="h-full w-auto object-contain block"
-            />
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={eventName}
+                className="h-full w-auto object-contain block"
+              />
+            ) : (
+              <span className="font-headline-md text-base font-black uppercase tracking-tight">
+                F
+              </span>
+            )}
           </div>
 
           {/* Typography Brand: ARENA.FEST */}

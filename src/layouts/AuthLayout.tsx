@@ -1,6 +1,6 @@
 import type { JSX, ReactNode } from "react";
 
-import fastoriaLogo from "@/assets/images/LOGO PNG.png";
+import { useEventSettings } from "@/hooks/useEventSettings";
 
 export interface AuthLayoutProps {
   children: ReactNode;
@@ -13,16 +13,26 @@ export default function AuthLayout({
   title = "Admin Login",
   subtitle = "Masuk untuk mengelola konten Fastoria.",
 }: AuthLayoutProps): JSX.Element {
+  const { settings } = useEventSettings();
+  const logoUrl = settings?.logo_url;
+  const eventName = settings?.event_name || "Fastoria Logo";
+
   return (
     <div className="min-h-screen bg-canvas-bg text-on-surface antialiased flex flex-col items-center justify-center px-margin-mobile py-12">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center gap-3 mb-6">
           <div className="h-14 border-[2.5px] border-black px-3 py-1.5 shadow-neo-sm bg-surface-white flex items-center justify-center">
-            <img
-              src={fastoriaLogo}
-              alt="Fastoria Logo"
-              className="h-full w-auto object-contain block"
-            />
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={eventName}
+                className="h-full w-auto object-contain block"
+              />
+            ) : (
+              <span className="font-headline-md text-base font-black uppercase tracking-tight">
+                THE.FASTORIA
+              </span>
+            )}
           </div>
 
           <h1 className="font-headline-lg text-headline-lg uppercase tracking-tight text-center">

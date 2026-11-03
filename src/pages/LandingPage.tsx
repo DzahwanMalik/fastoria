@@ -36,7 +36,7 @@ export default function LandingPage(): JSX.Element {
 
   // Pre-bootstrap state: Loading before landing page opens
   if (isLoading) {
-    return <LandingLoading />;
+    return <LandingLoading logoUrl={settings?.logo_url} />;
   }
 
   // Pre-bootstrap state: Error handling before landing page opens

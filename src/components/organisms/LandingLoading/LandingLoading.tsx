@@ -1,8 +1,8 @@
 import type { JSX } from "react";
 
-import fastoriaLogo from "@/assets/images/LOGO PNG.png";
 import Badge from "@/components/atoms/Badge";
 import Card from "@/components/atoms/Card";
+import { useEventSettings } from "@/hooks/useEventSettings";
 
 import type { LandingLoadingProps } from "./LandingLoading.types";
 
@@ -10,7 +10,12 @@ export default function LandingLoading({
   title = "MEMUAT FASTORIA...",
   message = "Menghubungkan ke server dan menyiapkan data kompetisi terbaru...",
   className = "",
+  logoUrl: propLogoUrl,
 }: LandingLoadingProps = {}): JSX.Element {
+  const { settings } = useEventSettings();
+  const logoUrl = propLogoUrl !== undefined ? propLogoUrl : settings?.logo_url;
+  const eventName = settings?.event_name || "Fastoria";
+
   return (
     <div
       role="status"
@@ -32,11 +37,17 @@ export default function LandingLoading({
         {/* Brand Logo Plate */}
         <div className="flex justify-center mb-6">
           <div className="h-16 border-[2.5px] border-black px-4 py-2 bg-surface-white shadow-neo-sm flex items-center justify-center">
-            <img
-              src={fastoriaLogo}
-              alt="Fastoria"
-              className="h-full w-auto object-contain block animate-pulse"
-            />
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={eventName}
+                className="h-full w-auto object-contain block animate-pulse"
+              />
+            ) : (
+              <span className="font-headline-md text-base font-black uppercase tracking-tight animate-pulse">
+                THE.FASTORIA
+              </span>
+            )}
           </div>
         </div>
 

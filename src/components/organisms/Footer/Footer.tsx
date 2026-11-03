@@ -9,10 +9,10 @@ import {
 } from "react-icons/fa6";
 import { FiGlobe } from "react-icons/fi";
 
-import fastoriaLogo from "@/assets/images/LOGO PNG.png";
 import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
 import FooterSocialLink from "@/components/molecules/FooterSocialLink";
+import { useEventSettings } from "@/hooks/useEventSettings";
 import { toEventSettingsValues } from "@/utils/eventSettings";
 import { sanitizePhoneDigits } from "@/utils/phone";
 
@@ -86,9 +86,12 @@ function getSocialHover(platform?: string, url?: string): string {
 }
 
 export default function Footer({
-  settings,
+  settings: propSettings,
   className = "",
 }: FooterProps): JSX.Element {
+  const { settings: hookSettings } = useEventSettings();
+  const settings = propSettings !== undefined ? propSettings : hookSettings;
+
   const values = useMemo(
     () => (settings ? toEventSettingsValues(settings) : null),
     [settings],
@@ -97,7 +100,7 @@ export default function Footer({
   const brandName = settings?.event_name || DEFAULT_BRAND_INFO.brandName;
   const brandDescription =
     settings?.event_description || DEFAULT_BRAND_INFO.description;
-  const logoSrc = settings?.logo_url || fastoriaLogo;
+  const logoSrc = settings?.logo_url;
 
   const venueName = settings?.venue_name || DEFAULT_VENUE_INFO.venueName;
   const address = settings?.address || DEFAULT_VENUE_INFO.address;
@@ -131,11 +134,17 @@ export default function Footer({
             <div className="flex items-center gap-3 mb-4">
               {/* Logo Frame Plate */}
               <div className="h-10 border-[2.5px] border-black px-2 py-0.5 shadow-neo-xs flex items-center justify-center bg-surface-white">
-                <img
-                  src={logoSrc}
-                  alt={brandName}
-                  className="h-full w-auto object-contain block"
-                />
+                {logoSrc ? (
+                  <img
+                    src={logoSrc}
+                    alt={brandName}
+                    className="h-full w-auto object-contain block"
+                  />
+                ) : (
+                  <span className="font-headline-md text-sm font-black uppercase tracking-tight">
+                    F
+                  </span>
+                )}
               </div>
 
               <span className="font-headline-md text-xl sm:text-2xl font-black uppercase tracking-tight text-on-surface">

@@ -3,10 +3,10 @@ import { FiLogOut, FiX } from "react-icons/fi";
 import { NavLink } from "react-router";
 import { toast } from "sonner";
 
-import fastoriaLogo from "@/assets/images/LOGO PNG.png";
 import Badge from "@/components/atoms/Badge";
 import Button from "@/components/atoms/Button";
 import { useAuth } from "@/hooks/useAuth";
+import { useEventSettings } from "@/hooks/useEventSettings";
 
 import { ADMIN_NAV_ITEMS } from "./AdminSidebar.constants";
 import type { AdminSidebarProps } from "./AdminSidebar.types";
@@ -16,11 +16,15 @@ export default function AdminSidebar({
   onClose,
 }: AdminSidebarProps): JSX.Element {
   const { user, signOut } = useAuth();
+  const { settings } = useEventSettings();
 
   const handleSignOut = async () => {
     await signOut();
     toast.success("Berhasil keluar.");
   };
+
+  const logoUrl = settings?.logo_url;
+  const brandName = settings?.event_name || "Fastoria";
 
   return (
     <>
@@ -38,11 +42,17 @@ export default function AdminSidebar({
       >
         <div className="h-20 px-5 border-b-[3px] border-black flex items-center gap-3">
           <div className="h-11 border-[2.5px] border-black px-2 py-1 shadow-neo-sm flex items-center justify-center shrink-0">
-            <img
-              src={fastoriaLogo}
-              alt="Fastoria Logo"
-              className="h-full w-auto object-contain block"
-            />
+            {logoUrl ? (
+              <img
+                src={logoUrl}
+                alt={`${brandName} Logo`}
+                className="h-full w-auto object-contain block"
+              />
+            ) : (
+              <span className="font-headline-md text-sm font-black uppercase tracking-tight">
+                F
+              </span>
+            )}
           </div>
 
           <span className="font-headline-md text-lg font-black uppercase tracking-tight leading-tight">
