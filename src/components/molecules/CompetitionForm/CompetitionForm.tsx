@@ -1,12 +1,13 @@
 import type { JSX } from "react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { FiSave } from "react-icons/fi";
+import { Controller, useForm } from "react-hook-form";
+import { FiLink, FiSave } from "react-icons/fi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
+import NumberInput from "@/components/atoms/NumberInput";
 import Select from "@/components/atoms/Select";
 import Textarea from "@/components/atoms/Textarea";
 import ImageUploadField from "@/components/molecules/ImageUploadField";
@@ -32,6 +33,7 @@ export default function CompetitionForm({
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<CompetitionFormValues>({
     resolver: zodResolver(competitionSchema),
@@ -89,21 +91,19 @@ export default function CompetitionForm({
       />
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Input
-          label="Biaya Pendaftaran (Rp)"
-          type="number"
-          inputMode="numeric"
+        <NumberInput
+          label="Biaya Pendaftaran"
+          leftElement="Rp"
           min={0}
+          step={1000}
           placeholder="120000"
           disabled={isBusy}
           error={errors.registration_fee?.message}
           {...register("registration_fee")}
         />
 
-        <Input
+        <NumberInput
           label="Anggota per Tim"
-          type="number"
-          inputMode="numeric"
           min={1}
           placeholder="Kosongkan bila individu"
           disabled={isBusy}
@@ -116,6 +116,7 @@ export default function CompetitionForm({
         label="Link Pendaftaran"
         type="url"
         placeholder="https://forms.gle/..."
+        leftElement={<FiLink aria-hidden="true" size={18} />}
         disabled={isBusy}
         error={errors.registration_link?.message}
         {...register("registration_link")}
@@ -125,18 +126,25 @@ export default function CompetitionForm({
         label="Link Guidebook"
         type="url"
         placeholder="https://drive.google.com/..."
+        leftElement={<FiLink aria-hidden="true" size={18} />}
         disabled={isBusy}
         error={errors.guidebook_link?.message}
         {...register("guidebook_link")}
       />
 
-      <Select
-        label="Kategori"
-        placeholder="Tanpa kategori"
-        options={categories}
-        disabled={isBusy}
-        error={errors.category_id?.message}
-        {...register("category_id")}
+      <Controller
+        control={control}
+        name="category_id"
+        render={({ field, fieldState }) => (
+          <Select
+            {...field}
+            label="Kategori"
+            placeholder="Tanpa kategori"
+            options={categories}
+            disabled={isBusy}
+            error={fieldState.error?.message}
+          />
+        )}
       />
 
       <div className="flex flex-wrap gap-3">

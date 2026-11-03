@@ -7,6 +7,9 @@ export default function Input({
   label,
   error,
   id,
+  type = "text",
+  leftElement,
+  leftElementClassName = "",
   className = "",
   ref,
   ...restProps
@@ -17,6 +20,7 @@ export default function Input({
   const hasError = Boolean(error);
 
   const borderClass = hasError ? "border-tertiary" : "border-black";
+  const paddingClass = leftElement ? "pl-11 pr-3.5" : "px-3.5";
 
   return (
     <div className={`flex flex-col gap-1.5 ${className}`.trim()}>
@@ -27,14 +31,25 @@ export default function Input({
         {label}
       </label>
 
-      <input
-        id={inputId}
-        ref={ref}
-        aria-invalid={hasError || undefined}
-        aria-describedby={hasError ? errorId : undefined}
-        className={`w-full bg-surface-white text-on-surface font-body-md text-body-md px-3.5 py-3 border-[2.5px] ${borderClass} shadow-neo-xs outline-none transition-shadow placeholder:text-on-surface-variant focus:shadow-neo-sm disabled:opacity-60`}
-        {...restProps}
-      />
+      <div className="relative">
+        <input
+          id={inputId}
+          ref={ref}
+          type={type}
+          aria-invalid={hasError || undefined}
+          aria-describedby={hasError ? errorId : undefined}
+          className={`w-full ${paddingClass} bg-surface-white text-on-surface font-body-md text-body-md py-3 border-[2.5px] ${borderClass} shadow-neo-xs outline-none transition-shadow placeholder:text-on-surface-variant focus:shadow-neo-sm disabled:opacity-60`}
+          {...restProps}
+        />
+
+        {leftElement && (
+          <span
+            className={`pointer-events-none absolute inset-y-0 left-3.5 flex items-center font-body-md text-body-md text-on-surface-variant ${leftElementClassName}`.trim()}
+          >
+            {leftElement}
+          </span>
+        )}
+      </div>
 
       {hasError && (
         <p

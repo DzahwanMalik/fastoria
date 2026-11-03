@@ -1,5 +1,6 @@
 import type { JSX } from "react";
-import { FiPlus, FiTrash2 } from "react-icons/fi";
+import { Controller } from "react-hook-form";
+import { FiLink, FiPlus, FiTrash2 } from "react-icons/fi";
 
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
@@ -22,6 +23,7 @@ const PLATFORM_OPTIONS: SelectOption[] = SOCIAL_MEDIA_PLATFORMS.map(
 
 export default function SocialMediaFields({
   register,
+  control,
   errors,
   fields,
   platforms,
@@ -33,7 +35,12 @@ export default function SocialMediaFields({
   return (
     <div className={`flex flex-col gap-4 ${className}`.trim()}>
       <div className="flex justify-end">
-        <Button variant="secondary" size="sm" disabled={disabled} onClick={onAdd}>
+        <Button
+          variant="secondary"
+          size="sm"
+          disabled={disabled}
+          onClick={onAdd}
+        >
           <FiPlus aria-hidden="true" />
           Tambah
         </Button>
@@ -57,16 +64,24 @@ export default function SocialMediaFields({
               className="flex flex-col gap-4 border-t-2 border-black/10 pt-5 first:border-t-0 first:pt-0"
             >
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <Select
-                  label="Platform"
-                  placeholder="Pilih platform"
-                  options={PLATFORM_OPTIONS}
-                  disabled={disabled}
-                  leadingIcon={
-                    PlatformIcon ? <PlatformIcon aria-hidden="true" /> : undefined
-                  }
-                  error={errors?.[index]?.platform?.message}
-                  {...register(`social_media.${index}.platform`)}
+                <Controller
+                  control={control}
+                  name={`social_media.${index}.platform`}
+                  render={({ field, fieldState }) => (
+                    <Select
+                      {...field}
+                      label="Platform"
+                      placeholder="Pilih platform"
+                      options={PLATFORM_OPTIONS}
+                      disabled={disabled}
+                      leadingIcon={
+                        PlatformIcon ? (
+                          <PlatformIcon aria-hidden="true" />
+                        ) : undefined
+                      }
+                      error={fieldState.error?.message}
+                    />
+                  )}
                 />
 
                 <Input
@@ -81,6 +96,7 @@ export default function SocialMediaFields({
               <Input
                 label="URL"
                 type="url"
+                leftElement={<FiLink aria-hidden="true" size={18} />}
                 placeholder="https://instagram.com/fastoria"
                 disabled={disabled}
                 error={errors?.[index]?.url?.message}

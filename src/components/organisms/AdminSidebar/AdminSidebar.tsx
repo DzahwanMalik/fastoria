@@ -118,7 +118,7 @@ export default function AdminSidebar({
           </p>
 
           <Button
-            variant="secondary"
+            variant="danger"
             size="sm"
             className="w-full"
             onClick={() => void handleSignOut()}

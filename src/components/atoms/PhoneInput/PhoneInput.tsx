@@ -6,13 +6,14 @@ import { PHONE_COUNTRY_CODE } from "@/utils/phone";
 import type { PhoneInputProps } from "./PhoneInput.types";
 
 /**
- * Phone field with a fixed country-code prefix. The bound value only holds the
- * local part (e.g. `85693415051`); callers expand it with
+ * Phone field with the country code shown as a left-side element. The bound
+ * value only holds the local part (e.g. `85693415051`); callers expand it with
  * `toInternationalPhone` before persisting.
  */
 export default function PhoneInput({
   label,
-  prefix = PHONE_COUNTRY_CODE,
+  leftElement = PHONE_COUNTRY_CODE,
+  leftElementClassName = "",
   hint,
   error,
   id,
@@ -26,6 +27,7 @@ export default function PhoneInput({
   const hasError = Boolean(error);
 
   const borderClass = hasError ? "border-tertiary" : "border-black";
+  const paddingClass = leftElement ? "pl-14 pr-3.5" : "px-3.5";
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const digits = event.target.value.replace(/\D/g, "");
@@ -46,11 +48,7 @@ export default function PhoneInput({
         {label}
       </label>
 
-      <div className="flex items-stretch">
-        <span className="inline-flex shrink-0 items-center border-[2.5px] border-r-0 border-black bg-surface-container px-3 font-body-md text-body-md text-on-surface">
-          {prefix}
-        </span>
-
+      <div className="relative">
         <input
           id={inputId}
           ref={ref}
@@ -59,10 +57,18 @@ export default function PhoneInput({
           autoComplete="tel-national"
           aria-invalid={hasError || undefined}
           aria-describedby={hasError ? errorId : undefined}
-          className={`w-full bg-surface-white text-on-surface font-body-md text-body-md px-3.5 py-3 border-[2.5px] ${borderClass} shadow-neo-xs outline-none transition-shadow placeholder:text-on-surface-variant focus:shadow-neo-sm disabled:opacity-60`}
+          className={`w-full ${paddingClass} bg-surface-white text-on-surface font-body-md text-body-md py-3 border-[2.5px] ${borderClass} shadow-neo-xs outline-none transition-shadow placeholder:text-on-surface-variant focus:shadow-neo-sm disabled:opacity-60`}
           {...restProps}
           onChange={handleChange}
         />
+
+        {leftElement && (
+          <span
+            className={`pointer-events-none absolute inset-y-0 left-3.5 flex items-center font-body-md text-body-md text-on-surface-variant ${leftElementClassName}`.trim()}
+          >
+            {leftElement}
+          </span>
+        )}
       </div>
 
       {hint && !hasError && (

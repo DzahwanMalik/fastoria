@@ -1,25 +1,55 @@
 export const PHONE_COUNTRY_CODE = "+62";
 
 /**
- * Contact `type` values that carry a phone number. Everything else (e.g.
- * "email") is treated as free text and never gets the country-code prefix.
+ * Strict contact types supported for event contacts.
  */
-const PHONE_CONTACT_TYPES = [
-  "whatsapp",
-  "wa",
-  "phone",
-  "telepon",
-  "tel",
-  "hp",
-  "handphone",
-  "mobile",
-];
+export const CONTACT_TYPES = ["Whatsapp", "Email"] as const;
+export type ContactType = (typeof CONTACT_TYPES)[number];
 
 /** Local part of an Indonesian number, excluding the `+62` country code. */
 export const PHONE_LOCAL_PATTERN = /^\d{8,13}$/;
 
+/**
+ * Normalizes untrusted or legacy contact types to a strict ContactType ("Whatsapp" | "Email"),
+ * or returns empty string if unselected/unrecognized.
+ */
+export function toContactType(value: string): ContactType | "" {
+  const normalized = value.trim().toLowerCase();
+
+  if (
+    normalized === "whatsapp" ||
+    normalized === "wa" ||
+    normalized === "phone" ||
+    normalized === "telepon" ||
+    normalized === "tel" ||
+    normalized === "hp" ||
+    normalized === "handphone" ||
+    normalized === "mobile"
+  ) {
+    return "Whatsapp";
+  }
+
+  if (
+    normalized === "email" ||
+    normalized === "e-mail" ||
+    normalized === "mail" ||
+    normalized === "surel"
+  ) {
+    return "Email";
+  }
+
+  return "";
+}
+
+/**
+ * Checks if a contact type represents a WhatsApp contact.
+ */
 export function isPhoneContactType(type: string): boolean {
-  return PHONE_CONTACT_TYPES.includes(type.trim().toLowerCase());
+  return toContactType(type) === "Whatsapp";
+}
+
+export function isContactType(value: string): value is ContactType {
+  return (CONTACT_TYPES as readonly string[]).includes(value);
 }
 
 export function sanitizePhoneDigits(input: string): string {

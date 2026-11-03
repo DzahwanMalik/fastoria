@@ -1,10 +1,11 @@
 import type { JSX } from "react";
 import { useForm } from "react-hook-form";
-import { FiLogIn } from "react-icons/fi";
+import { FiLock, FiLogIn, FiMail } from "react-icons/fi";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
+import PasswordInput from "@/components/atoms/PasswordInput";
 
 import type { LoginFormValues } from "./LoginForm.schema";
 import { loginSchema } from "./LoginForm.schema";
@@ -39,16 +40,17 @@ export default function LoginForm({
         type="email"
         autoComplete="email"
         placeholder="admin@fastoria.id"
+        leftElement={<FiMail aria-hidden="true" size={18} />}
         disabled={isLoading}
         error={errors.email?.message}
         {...register("email")}
       />
 
-      <Input
+      <PasswordInput
         label="Password"
-        type="password"
         autoComplete="current-password"
         placeholder="password"
+        leftElement={<FiLock aria-hidden="true" size={18} />}
         disabled={isLoading}
         error={errors.password?.message}
         {...register("password")}

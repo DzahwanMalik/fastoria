@@ -47,6 +47,7 @@ export default function SocialMediaForm({
     >
       <SocialMediaFields
         register={register}
+        control={control}
         errors={errors.social_media}
         fields={fields}
         platforms={items?.map((item) => item.platform)}

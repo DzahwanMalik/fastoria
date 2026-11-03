@@ -1,4 +1,4 @@
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
 
 import type {
   ContactListValues,
@@ -44,6 +44,7 @@ export interface FieldListBaseProps {
 
 export interface ContactFieldsProps extends FieldListBaseProps {
   register: UseFormRegister<ContactListValues>;
+  control: Control<ContactListValues>;
   errors?: FieldErrors<ContactListValues>["contact"];
   /** Row `type` values, in field order, to pick the phone input per row. */
   types?: string[];
@@ -51,11 +52,13 @@ export interface ContactFieldsProps extends FieldListBaseProps {
 
 export interface TimelineFieldsProps extends FieldListBaseProps {
   register: UseFormRegister<TimelineListValues>;
+  control: Control<TimelineListValues>;
   errors?: FieldErrors<TimelineListValues>["timeline"];
 }
 
 export interface SocialMediaFieldsProps extends FieldListBaseProps {
   register: UseFormRegister<SocialMediaListValues>;
+  control: Control<SocialMediaListValues>;
   errors?: FieldErrors<SocialMediaListValues>["social_media"];
   /** Row `platform` values, in field order, to pick the brand icon per row. */
   platforms?: string[];

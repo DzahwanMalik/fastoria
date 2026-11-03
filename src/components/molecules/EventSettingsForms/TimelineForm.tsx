@@ -45,6 +45,7 @@ export default function TimelineForm({
     >
       <TimelineFields
         register={register}
+        control={control}
         errors={errors.timeline}
         fields={fields}
         disabled={isLoading}

@@ -107,9 +107,16 @@ export default function EventSettingsSummary({
                   key={`${item.type}-${item.label}-${item.value}`}
                   className="flex flex-wrap items-center justify-between gap-2"
                 >
-                  <span className="font-body-sm text-body-sm">{item.label}</span>
+                  <span className="font-body-sm text-body-sm">
+                    {item.label}
+                  </span>
                   <Badge color="surface-container" size="sm" shadow="none">
-                    {item.type}: {item.value}
+                    {item.type}:{" "}
+                    {item.value.startsWith("+62")
+                      ? item.value
+                      : item.value.includes("@")
+                        ? item.value
+                        : `+62${item.value.replace(/^0+/, "")}`}
                   </Badge>
                 </li>
               ))}
@@ -186,7 +193,10 @@ export default function EventSettingsSummary({
                     {item.title}
                   </p>
                   <p className="mt-1 font-label-caps text-label-caps uppercase tracking-wider text-on-surface-variant">
-                    {formatTimelineDate(item.start_date, item.end_date || undefined)}
+                    {formatTimelineDate(
+                      item.start_date,
+                      item.end_date || undefined,
+                    )}
                   </p>
                   <p className="mt-1 font-body-sm text-body-sm text-on-surface-variant">
                     {item.description}

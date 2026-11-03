@@ -6,7 +6,7 @@ import Card from "@/components/atoms/Card";
 import type { ContactCardItem } from "@/components/molecules/ContactCard";
 import ContactCard from "@/components/molecules/ContactCard";
 import { toEventSettingsValues } from "@/utils/eventSettings";
-import { isPhoneContactType, sanitizePhoneDigits } from "@/utils/phone";
+import { sanitizePhoneDigits } from "@/utils/phone";
 
 import { DEFAULT_CONTACTS } from "./ContactSection.constants";
 import type { ContactSectionProps } from "./ContactSection.types";
@@ -25,27 +25,24 @@ export default function ContactSection({
       const values = toEventSettingsValues(settings);
       if (values.contact.length > 0) {
         return values.contact.map((item, index) => {
-          const isPhone = isPhoneContactType(item.type);
+          const isWhatsapp = item.type === "Whatsapp";
           const digits = sanitizePhoneDigits(item.value);
           const waNumber = digits.startsWith("62")
             ? digits
             : `62${digits.replace(/^0+/, "")}`;
-          const actionHref = isPhone
-            ? `https://wa.me/${waNumber}`
-            : item.type.toLowerCase().includes("email")
-              ? `mailto:${item.value}`
-              : item.value;
 
           return {
             id: `contact-${index + 1}`,
-            categoryTag: (item.type || "WHATSAPP").toUpperCase(),
+            categoryTag: isWhatsapp ? "WHATSAPP" : "EMAIL",
             name: item.label || "Narahubung Resmi",
             description:
               "Hubungi narahubung resmi untuk informasi seputar pendaftaran, teknis perlombaan, & informasi penting.",
             contactValue: item.value,
-            actionLabel: isPhone ? "Chat WhatsApp" : "Kirim Pesan",
-            actionHref,
-            actionVariant: isPhone ? "whatsapp" : "email",
+            actionLabel: isWhatsapp ? "Chat WhatsApp" : "Kirim Email Resmi",
+            actionHref: isWhatsapp
+              ? `https://wa.me/${waNumber}`
+              : `mailto:${item.value}`,
+            actionVariant: isWhatsapp ? "whatsapp" : "email",
           };
         });
       }

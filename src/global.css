@@ -106,6 +106,16 @@
     scroll-behavior: smooth;
   }
 
+  /* Hide native scrollbars app-wide; content stays scrollable. */
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
   body {
     margin: 0;
     padding: 0;

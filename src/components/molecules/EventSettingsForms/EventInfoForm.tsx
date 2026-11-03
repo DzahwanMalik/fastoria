@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import Input from "@/components/atoms/Input";
+import NumberInput from "@/components/atoms/NumberInput";
 import Textarea from "@/components/atoms/Textarea";
 import ImageUploadField from "@/components/molecules/ImageUploadField";
 import { useImageField } from "@/hooks/useImageField";
@@ -85,11 +86,11 @@ export default function EventInfoForm({
       />
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-        <Input
-          label="Total Hadiah (Rp)"
-          type="number"
-          inputMode="numeric"
+        <NumberInput
+          label="Total Hadiah"
+          leftElement="Rp"
           min={0}
+          step={1000}
           placeholder="45000000"
           disabled={isBusy}
           error={errors.prize_pool?.message}

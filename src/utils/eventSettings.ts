@@ -5,7 +5,7 @@ import type {
   TimelineItemValues,
 } from "@/components/molecules/EventSettingsForms";
 import type { Json, Tables, TablesInsert, TablesUpdate } from "@/types/database";
-import { isPhoneContactType, toInternationalPhone, toLocalPhone } from "@/utils/phone";
+import { toContactType, toInternationalPhone, toLocalPhone } from "@/utils/phone";
 import { toSocialMediaPlatform } from "@/utils/socialMedia";
 import { toStoredImageUrl } from "@/utils/storage";
 
@@ -51,17 +51,18 @@ export const toEventSettingsValues = (
       return [];
     }
 
-    const type = asText(record.type);
+    const type = toContactType(asText(record.type));
 
     return [
       {
         type,
         label: asText(record.label),
-        // Phone rows are edited as the local part; the `+62` prefix lives in
+        // WhatsApp rows are edited as the local part; the `+62` code is shown in
         // the input and is re-added by `toContactUpdate`.
-        value: isPhoneContactType(type)
-          ? toLocalPhone(asText(record.value))
-          : asText(record.value),
+        value:
+          type === "Whatsapp"
+            ? toLocalPhone(asText(record.value))
+            : asText(record.value),
       },
     ];
   }),
@@ -150,9 +151,10 @@ export const toContactUpdate = (
       type: item.type,
       label: item.label,
       // Stored in international format, e.g. `+6285693415051`.
-      value: isPhoneContactType(item.type)
-        ? toInternationalPhone(item.value)
-        : item.value,
+      value:
+        item.type === "Whatsapp"
+          ? toInternationalPhone(item.value)
+          : item.value,
     })),
   });
 

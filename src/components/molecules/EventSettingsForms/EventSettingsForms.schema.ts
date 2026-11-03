@@ -1,26 +1,43 @@
 import { z } from "zod";
 
-import { isPhoneContactType, PHONE_LOCAL_PATTERN } from "@/utils/phone";
+import type { ContactType } from "@/utils/phone";
+import { CONTACT_TYPES, PHONE_LOCAL_PATTERN } from "@/utils/phone";
 import { SOCIAL_MEDIA_PLATFORMS } from "@/utils/socialMedia";
+
+export { CONTACT_TYPES };
+export type { ContactType };
 
 /**
  * Numeric fields stay as strings in the form and are converted in the payload
  * builders, so empty inputs never coerce to `0`.
  *
- * Phone rows hold the local part only (the `+62` code is a fixed prefix in the
- * input), while every other type stays free text — e.g. an email.
+ * WhatsApp rows hold the local phone part only (the `+62` code is shown inside the
+ * input), while Email rows require a valid email address.
  */
 export const contactItemSchema = z
   .object({
-    type: z.string().min(1, "Tipe kontak wajib diisi."),
+    type: z
+      .enum(CONTACT_TYPES)
+      .or(z.literal(""))
+      .refine((value) => value.trim().length > 0, {
+        message: "Tipe kontak wajib dipilih.",
+      }),
     label: z.string().min(1, "Label kontak wajib diisi."),
     value: z.string().min(1, "Nilai kontak wajib diisi."),
   })
   .refine(
-    (item) => !isPhoneContactType(item.type) || PHONE_LOCAL_PATTERN.test(item.value),
+    (item) => item.type !== "Whatsapp" || PHONE_LOCAL_PATTERN.test(item.value),
     {
       path: ["value"],
       message: "Nomor harus 8-13 digit angka, tanpa awalan +62 atau 0.",
+    },
+  )
+  .refine(
+    (item) =>
+      item.type !== "Email" || z.string().email().safeParse(item.value).success,
+    {
+      path: ["value"],
+      message: "Format email tidak valid.",
     },
   );
 

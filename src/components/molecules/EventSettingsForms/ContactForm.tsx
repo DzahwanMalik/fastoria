@@ -47,6 +47,7 @@ export default function ContactForm({
     >
       <ContactFields
         register={register}
+        control={control}
         errors={errors.contact}
         fields={fields}
         types={types}

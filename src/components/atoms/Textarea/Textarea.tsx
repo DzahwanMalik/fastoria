@@ -8,6 +8,7 @@ export default function Textarea({
   error,
   id,
   rows = 4,
+  autoSize = true,
   className = "",
   ref,
   ...restProps
@@ -18,6 +19,9 @@ export default function Textarea({
   const hasError = Boolean(error);
 
   const borderClass = hasError ? "border-tertiary" : "border-black";
+  const sizingClass = autoSize
+    ? "field-sizing-content resize-none min-h-24"
+    : "resize-y";
 
   return (
     <div className={`flex flex-col gap-1.5 ${className}`.trim()}>
@@ -34,7 +38,7 @@ export default function Textarea({
         rows={rows}
         aria-invalid={hasError || undefined}
         aria-describedby={hasError ? errorId : undefined}
-        className={`w-full resize-y bg-surface-white text-on-surface font-body-md text-body-md px-3.5 py-3 border-[2.5px] ${borderClass} shadow-neo-xs outline-none transition-shadow placeholder:text-on-surface-variant focus:shadow-neo-sm disabled:opacity-60`}
+        className={`w-full ${sizingClass} bg-surface-white text-on-surface font-body-md text-body-md px-3.5 py-3 border-[2.5px] ${borderClass} shadow-neo-xs outline-none transition-shadow placeholder:text-on-surface-variant focus:shadow-neo-sm disabled:opacity-60`}
         {...restProps}
       />
 
